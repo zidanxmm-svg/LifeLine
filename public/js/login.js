@@ -5,9 +5,6 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
-    // সুপার অ্যাডমিন লগিন লজিক (যেহেতু সুপার অ্যাডমিনের ডেটাবেস নেই, সে মাস্টার-কি দিয়ে ঢুকবে)
-    
-
     // ডোনার বা হসপিটাল লগিন API কল
     const endpoint = role === 'donor' ? '/api/donor/login' : '/api/hospital/login';
 
@@ -23,18 +20,18 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         if (result.success) {
             // ব্রাউজারের মেমোরিতে ইউজারের ডেটা সেভ রাখা
             localStorage.setItem('userRole', role);
-            if(role === 'donor') localStorage.setItem('userData', JSON.stringify(result.donorData));
-            if(role === 'hospital') localStorage.setItem('userData', JSON.stringify(result.hospitalData));
-            
+            if (role === 'donor')   localStorage.setItem('userData', JSON.stringify(result.donorData));
+            if (role === 'hospital') localStorage.setItem('userData', JSON.stringify(result.hospitalData));
+
             await showPopup(result.message, 'success', { title: 'লগিন সফল' });
-            
-            // ইউজার অনুযায়ী সঠিক ড্যাশবোর্ডে রিডাইরেক্ট করা
+
+            // ইউজার অনুযায়ী সঠিক ড্যাশবোর্ডে রিডাইরেক্ট
             if (role === 'donor') {
-                window.location.href = '/donor-dashboard.html';
+                window.location.replace('/donor-dashboard.html');
             } else if (role === 'hospital') {
-                window.location.href = '/hospital-dashboard.html';
+                window.location.replace('/hospital-dashboard.html');
             }
-            
+
         } else {
             await showPopup(result.message, 'error', { title: 'লগিন ব্যর্থ' });
         }
