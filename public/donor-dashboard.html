@@ -467,11 +467,77 @@
                 <button type="submit" class="btn-primary">আপডেট সেভ করুন</button>
             </form>
         </div>
+
+        <!-- ── PASSWORD CHANGE ── -->
+        <details class="glass-card card-top-red p-6 mt-6 cursor-pointer group">
+            <summary class="section-heading select-none font-bold text-white flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="dot" style="background:#dc2626;"></span>
+                    🔒 পাসওয়ার্ড পরিবর্তন করুন (Security Settings)
+                </div>
+                <span class="text-xs text-white/40 group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <form id="donorChangePasswordForm" class="grid sm:grid-cols-3 gap-4 mt-4">
+                <div>
+                    <label class="form-label">বর্তমান পাসওয়ার্ড</label>
+                    <input type="password" id="dp_current" class="form-input" placeholder="বর্তমান পাসওয়ার্ড" required>
+                </div>
+                <div>
+                    <label class="form-label">নতুন পাসওয়ার্ড</label>
+                    <input type="password" id="dp_new" class="form-input" placeholder="কমপক্ষে ৬ অক্ষর" minlength="6" required>
+                </div>
+                <div>
+                    <label class="form-label">নিশ্চিত করুন</label>
+                    <input type="password" id="dp_confirm" class="form-input" placeholder="পাসওয়ার্ড পুনরায় দিন" required>
+                </div>
+                <div class="sm:col-span-3">
+                    <button type="submit" class="btn-primary" style="padding:11px 0;">পাসওয়ার্ড পরিবর্তন করুন</button>
+                </div>
+            </form>
+        </details>
     </main>
 
     <script src="/js/notify.js"></script>
     <script src="/js/bd-districts.js"></script>
     <script src="/js/mapbox-utils.js"></script>
     <script src="/js/donor.js"></script>
+
+    <script>
+    document.getElementById('donorChangePasswordForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        const cur = document.getElementById('dp_current').value;
+        const nw  = document.getElementById('dp_new').value;
+        const con = document.getElementById('dp_confirm').value;
+        if (nw !== con) { showToast('নতুন পাসওয়ার্ড মিলছে না', 'error'); return; }
+        const btn = e.target.querySelector('button[type="submit"]');
+        btn.textContent = 'পরিবর্তন হচ্ছে...'; btn.disabled = true;
+        try {
+            const res = await fetch('/api/donor/change-password', {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ donorId: userData.id, currentPassword: cur, newPassword: nw })
+            });
+            const data = await res.json();
+            if (data.success) {
+                showToast(data.message, 'success');
+                e.target.reset();
+            } else {
+                showToast(data.message, 'error');
+            }
+        } catch(err) { showToast('সার্ভার এরর', 'error'); }
+        finally { btn.textContent = 'পাসওয়ার্ড পরিবর্তন করুন'; btn.disabled = false; }
+    });
+    </script>
+
+
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            const loginToast = localStorage.getItem('loginToast');
+            if (loginToast && typeof showToast === 'function') {
+                showToast(loginToast, 'success', 2000);
+                localStorage.removeItem('loginToast');
+            }
+        });
+    </script>
 </body>
 </html>

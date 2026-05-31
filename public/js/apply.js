@@ -59,6 +59,8 @@ function initMap(startLat, startLng) {
         maxBounds: [[85, 19], [94, 28]]
     });
 
+    window.map = map;
+
     map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
     // Draggable marker

@@ -3,144 +3,487 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeLine - Secure Login</title>
+    <title>LifeLine - Secure Login & Registration</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css">
     <script src="https://cdn.tailwindcss.com"></script>
-</head>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        :root {
+            --red: #e11d48;
+            --red-dark: #be123c;
+            --red-glow: rgba(225,29,72,0.35);
+            --dark: #060b18;
+            --dark2: #1e293b;
+            --border: rgba(255,255,255,0.08);
+            --white: #ffffff;
+        }
+        body {
+            font-family: 'Hind Siliguri', 'Inter', sans-serif;
+            background-color: var(--dark);
+            color: var(--white);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+            padding-top: 90px;
+            padding-bottom: 40px;
+        }
+        /* Background decorative glow */
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 20% 20%, rgba(190,18,60,0.18) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 80% 80%, rgba(29,78,216,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 40% at 50% 50%, rgba(15,23,42,0.9) 0%, transparent 100%);
+            z-index: 0;
+            pointer-events: none;
+        }
 
-<body class="bg-gray-100 h-screen flex items-center justify-center">
-    <!-- NAVBAR -->
-<nav style="
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    background: rgba(6,11,24,0.9);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-">
-    <div style="
-        max-width:1200px;
-        margin:0 auto;
-        padding:0 1.5rem;
-        height:70px;
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-    ">
-        <a href="/" style="
-            display:flex;
-            align-items:center;
-            gap:12px;
-            text-decoration:none;
-        ">
-            <div style="
-                width:42px;
-                height:42px;
-                border-radius:12px;
-                display:flex;
-                align-items:center;
-                justify-content:center;
-                background:linear-gradient(135deg,#be123c,#e11d48);
-                color:#fff;
-                font-size:1.3rem;
-            ">🩸</div>
+        .mapboxgl-ctrl-logo, .mapboxgl-ctrl-attrib { display: none !important; }
+        #locationMap { width: 100%; height: 100%; }
+        .map-search-results { background:#0f172a; border: 1px solid rgba(255,255,255,0.1); border-radius:8px; box-shadow:0 10px 25px rgba(0,0,0,0.5); margin-top:4px; max-height:180px; overflow-y:auto; display:none; position:absolute; left:0; right:0; z-index:100; }
+        .map-search-results.show { display:block; }
+        .map-search-item { padding:10px 14px; cursor:pointer; font-size:.85rem; border-bottom:1px solid rgba(255,255,255,0.05); color: #cbd5e1; }
+        .map-search-item:hover { background:rgba(255,255,255,0.08); color: #fff; }
 
-            <span style="
-                font-size:1.6rem;
-                font-weight:900;
-                color:#fff;
-            ">Life<span style="color:#e11d48;">Line</span></span>
-        </a>
+        /* Custom Scrollbar for map results & dropdowns */
+        .map-search-results::-webkit-scrollbar { width: 6px; }
+        .map-search-results::-webkit-scrollbar-track { background: transparent; }
+        .map-search-results::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
 
-        <div style="display:flex;gap:10px;">
-            <a href="/doctors.html" style="
-                padding:9px 20px;
-                border-radius:10px;
-                text-decoration:none;
-                color:#34d399;
-                border:1px solid rgba(16,185,129,.3);
-                background:rgba(16,185,129,.05);
-            ">🩺 ডাক্তার সিরিয়াল</a>
-
-            <a href="/apply.html" style="
-                padding:9px 20px;
-                border-radius:10px;
-                text-decoration:none;
-                color:#fff;
-                border:1px solid rgba(255,255,255,.15);
-                background:rgba(255,255,255,.05);
-            ">আবেদন করুন</a>
-
-            <a href="/login.html" id="loginBtn" style="
-                padding:9px 20px;
-                border-radius:10px;
-                text-decoration:none;
-                color:#fff;
-                background:linear-gradient(135deg,#be123c,#e11d48);
-            ">লগিন করুন</a>
-        </div>
-    </div>
-</nav>
-
-    <div class="bg-white p-8 rounded-xl shadow-xl w-full max-w-md border-t-4 border-red-600">
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-800 tracking-wider">🩸 LifeLine</h1>
-            <p class="text-gray-500 mt-2">সিকিউর লগিন প্যানেল</p>
-        </div>
-
-        <form id="loginForm" class="space-y-5">
-            <div>
-                <label class="block text-gray-700 font-semibold mb-1">অ্যাকাউন্টের ধরন</label>
-                <select id="userRole" class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-red-500 bg-gray-50">
-                    <option value="donor">রক্তদাতা (Donor)</option>
-                    <option value="hospital">হসপিটাল অ্যাডমিন</option>
-                </select>
-            </div>
-
-            <div>
-                <label class="block text-gray-700 font-semibold mb-1">ইমেইল / ইউজারনেম</label>
-                <input type="text" id="username" required class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-red-500" placeholder="আপনার ইমেইল বা ইউজারনেম দিন">
-            </div>
-
-            <div>
-                <label class="block text-gray-700 font-semibold mb-1">পাসওয়ার্ড বা মাস্টার-কি</label>
-                <input type="password" id="password" required class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-red-500" placeholder="••••••••">
-            </div>
-
-            <button type="submit" class="w-full bg-red-600 text-white font-bold py-3 rounded hover:bg-red-700 transition shadow-lg text-lg">
-                লগিন করুন
-            </button>
-        </form>
-        
-        <div class="text-center mt-6">
-            <a href="/apply.html" class="text-sm text-red-600 hover:underline font-semibold">নতুন অ্যাকাউন্টের জন্য আবেদন করুন</a>
-            <span class="text-gray-300 mx-2">|</span>
-            <a href="/" class="text-sm text-blue-600 hover:underline">← হোমপেজে ফিরে যান</a>
-        </div>
-    </div>
-
-    <script src="/js/notify.js"></script>
+        /* Smooth expanding transition for container */
+        .unified-container-transition {
+            transition: max-width 0.5s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s;
+        }
+    </style>
     <script>
-        // ── লগিন থাকলে সাথে সাথে ড্যাশবোর্ডে পাঠাও ──
+        // ── Redirect immediately if user is already logged in ──
         (function redirectIfLoggedIn() {
             const role = localStorage.getItem('userRole');
             const userData = localStorage.getItem('userData');
-            const masterKey = localStorage.getItem('masterKey');
-
-            if (role === 'superadmin' && masterKey) {
-                window.location.replace('/master-dashboard.html');
+            if (role === 'doctor' && userData) {
+                window.location.replace('/dr-panel');
                 return;
             }
-
             if ((role === 'donor' || role === 'hospital') && userData) {
                 const dashboard = role === 'donor'
-                    ? '/donor-dashboard.html'
-                    : '/hospital-dashboard.html';
+                    ? '/donor-panel'
+                    : '/hospital-panel';
                 window.location.replace(dashboard);
             }
         })();
     </script>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        background: rgba(6,11,24,0.9);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    ">
+        <div style="
+            max-width:1200px;
+            margin:0 auto;
+            padding:0 1.5rem;
+            height:70px;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+        ">
+            <a href="/" style="
+                display:flex;
+                align-items:center;
+                gap:12px;
+                text-decoration:none;
+            ">
+                <div style="
+                    width:42px;
+                    height:42px;
+                    border-radius:12px;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    background:linear-gradient(135deg,#be123c,#e11d48);
+                    color:#fff;
+                    font-size:1.3rem;
+                    box-shadow: 0 4px 16px rgba(225,29,72,0.35);
+                ">🩸</div>
+
+                <span style="
+                    font-size:1.6rem;
+                    font-weight:900;
+                    color:#fff;
+                    font-family: 'Inter', sans-serif;
+                ">Life<span style="color:#e11d48;">Line</span></span>
+            </a>
+
+            <div style="display:flex;gap:10px;">
+                <a href="/doctors" style="
+                    padding:9px 20px;
+                    border-radius:10px;
+                    text-decoration:none;
+                    color:#34d399;
+                    border:1px solid rgba(16,185,129,.3);
+                    background:rgba(16,185,129,.05);
+                    font-weight:600;
+                    font-size:0.88rem;
+                ">🩺 ডাক্তার সিরিয়াল</a>
+
+                <a href="/login" id="loginBtn" style="
+                    padding:9px 20px;
+                    border-radius:10px;
+                    text-decoration:none;
+                    color:#fff;
+                    background:linear-gradient(135deg,#be123c,#e11d48);
+                    font-weight:600;
+                    font-size:0.88rem;
+                    box-shadow: 0 4px 14px rgba(225,29,72,0.35);
+                ">লগইন / রেজিস্টার</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- UNIFIED CARD CONTAINER -->
+    <div id="authContainer" class="relative z-10 w-[95%] max-w-md bg-slate-900/60 backdrop-blur-xl border border-white/10 p-6 md:p-8 rounded-2xl shadow-2xl unified-container-transition overflow-hidden">
+        
+        <!-- Sliding Switch Header -->
+        <div class="flex bg-slate-950/80 border border-white/5 p-1 rounded-xl mb-8 relative w-64 mx-auto overflow-hidden">
+            <div id="toggleBg" class="absolute top-1 bottom-1 w-[calc(50%-4px)] bg-gradient-to-r from-rose-700 to-rose-500 rounded-lg transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1) z-0 left-1"></div>
+            <button type="button" id="tabLogin" class="flex-1 py-2 text-center text-sm font-bold transition-all duration-300 relative z-10 text-white focus:outline-none">লগইন</button>
+            <button type="button" id="tabRegister" class="flex-1 py-2 text-center text-sm font-bold transition-all duration-300 relative z-10 text-slate-400 hover:text-white focus:outline-none">রেজিস্ট্রেশন</button>
+        </div>
+
+        <!-- Slider Wrapper Container -->
+        <div class="relative overflow-hidden w-full">
+            <div id="sliderWrapper" class="w-[200%] flex items-start transition-transform duration-500 cubic-bezier(0.4, 0, 0.2, 1)">
+                
+                <!-- PANEL 1: LOGIN (LEFT) -->
+                <div id="loginPanel" class="w-1/2 shrink-0 transition-opacity duration-300 pr-2 md:pr-4 opacity-100">
+                    <div class="text-center mb-6">
+                        <h2 class="text-2xl font-black tracking-wide text-white">🩸 LifeLine লগইন</h2>
+                        <p class="text-xs text-slate-400 mt-1">সিকিউর ড্যাশবোর্ড প্যানেল</p>
+                    </div>
+                    
+                    <form id="loginForm" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">ইমেইল / ইউজারনেম</label>
+                            <input type="text" id="username" required class="w-full p-3 bg-slate-950/60 border border-white/10 rounded-lg focus:outline-none focus:border-rose-500 text-white text-sm placeholder-slate-500" placeholder="আপনার ইমেইল বা ইউজারনেম দিন">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">পাসওয়ার্ড বা মাস্টার-কি</label>
+                            <input type="password" id="password" required class="w-full p-3 bg-slate-950/60 border border-white/10 rounded-lg focus:outline-none focus:border-rose-500 text-white text-sm placeholder-slate-500" placeholder="••••••••">
+                        </div>
+
+                        <button type="submit" class="w-full bg-gradient-to-r from-rose-700 to-rose-600 hover:from-rose-600 hover:to-rose-500 text-white font-bold py-3 rounded-lg transition shadow-lg text-sm tracking-wide">
+                            লগইন করুন
+                        </button>
+                    </form>
+                    
+                    <div class="text-center mt-6 text-xs text-slate-400">
+                        <span class="cursor-pointer text-rose-400 hover:underline font-semibold" onclick="switchTab('register')">নতুন অ্যাকাউন্টের জন্য আবেদন করুন</span>
+                        <span class="mx-2 text-slate-600">|</span>
+                        <a href="/" class="text-sky-400 hover:underline">← হোমপেজে ফিরে যান</a>
+                    </div>
+                </div>
+
+                <!-- PANEL 2: REGISTRATION (RIGHT) -->
+                <div id="registerPanel" class="w-1/2 shrink-0 transition-opacity duration-300 pl-2 md:pl-4 opacity-0 pointer-events-none h-0 overflow-hidden">
+                    <div class="text-center mb-6">
+                        <h2 class="text-2xl font-black tracking-wide text-white">📝 ড্যাশবোর্ড রেজিস্ট্রেশন</h2>
+                        <p class="text-xs text-slate-400 mt-1">ডোনার বা হসপিটাল হিসেবে লাইফলাইন প্ল্যাটফর্মে আবেদন করুন</p>
+                    </div>
+                    
+                    <form id="applicationForm" class="grid lg:grid-cols-[1.1fr_0.9fr] gap-8">
+                        <!-- Registration Form Fields -->
+                        <div class="space-y-4">
+                            <div class="grid sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="applicationType" class="block text-xs font-semibold text-slate-300 mb-1">অ্যাকাউন্ট টাইপ</label>
+                                    <select id="applicationType" class="w-full p-3 bg-slate-950/60 border border-white/10 rounded-lg focus:outline-none focus:border-rose-500 text-white text-sm">
+                                        <option value="donor">রক্তদাতা (Donor)</option>
+                                        <option value="hospital">মেডিকেল / হসপিটাল</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="appName" class="block text-xs font-semibold text-slate-300 mb-1">নাম</label>
+                                    <input id="appName" required class="w-full p-3 bg-slate-950/60 border border-white/10 rounded-lg focus:outline-none focus:border-rose-500 text-white text-sm placeholder-slate-500" placeholder="পূর্ণ নাম / প্রতিষ্ঠানের নাম">
+                                </div>
+                            </div>
+
+                            <div class="grid sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="appEmail" class="block text-xs font-semibold text-slate-300 mb-1">ইমেইল</label>
+                                    <input id="appEmail" type="email" required class="w-full p-3 bg-slate-950/60 border border-white/10 rounded-lg focus:outline-none focus:border-rose-500 text-white text-sm placeholder-slate-500" placeholder="example@email.com">
+                                </div>
+                                <div>
+                                    <label for="appPassword" class="block text-xs font-semibold text-slate-300 mb-1">পাসওয়ার্ড</label>
+                                    <input id="appPassword" type="password" required minlength="6" class="w-full p-3 bg-slate-950/60 border border-white/10 rounded-lg focus:outline-none focus:border-rose-500 text-white text-sm placeholder-slate-500" placeholder="কমপক্ষে ৬ অক্ষরের পাসওয়ার্ড">
+                                </div>
+                            </div>
+
+                            <div class="grid sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="appPhone" class="block text-xs font-semibold text-slate-300 mb-1">ফোন / WhatsApp</label>
+                                    <input id="appPhone" required class="w-full p-3 bg-slate-950/60 border border-white/10 rounded-lg focus:outline-none focus:border-rose-500 text-white text-sm placeholder-slate-500" placeholder="01xxxxxxxxx">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-300 mb-1">জেলা ও উপজেলা</label>
+                                    <div class="flex gap-2">
+                                        <select id="appLocation" required class="w-1/2 p-3 bg-slate-950/60 border border-white/10 rounded-lg focus:outline-none focus:border-rose-500 text-white text-sm" onchange="populateUpazilas('appLocation', 'appUpazila')">
+                                            <option value="" disabled selected>জেলা</option>
+                                        </select>
+                                        <select id="appUpazila" required class="w-1/2 p-3 bg-slate-950/60 border border-white/10 rounded-lg focus:outline-none focus:border-rose-500 text-white text-sm" disabled>
+                                            <option value="" disabled selected>উপজেলা</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Donor Specific Fields -->
+                            <div id="donorFields" class="grid sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="donorBloodGroup" class="block text-xs font-semibold text-slate-300 mb-1">রক্তের গ্রুপ</label>
+                                    <select id="donorBloodGroup" class="w-full p-3 bg-slate-950/60 border border-white/10 rounded-lg focus:outline-none focus:border-rose-500 text-white text-sm">
+                                        <option value="A+">A+</option><option value="B+">B+</option>
+                                        <option value="O+">O+</option><option value="AB+">AB+</option>
+                                        <option value="A-">A-</option><option value="B-">B-</option>
+                                        <option value="O-">O-</option><option value="AB-">AB-</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="donorProfession" class="block text-xs font-semibold text-slate-300 mb-1">পেশা</label>
+                                    <input id="donorProfession" class="w-full p-3 bg-slate-950/60 border border-white/10 rounded-lg focus:outline-none focus:border-rose-500 text-white text-sm placeholder-slate-500" placeholder="Student, Job, Business">
+                                </div>
+                                <div>
+                                    <label for="donorDonationCount" class="block text-xs font-semibold text-slate-300 mb-1">কয়বার রক্ত দিয়েছেন</label>
+                                    <input id="donorDonationCount" type="number" min="0" step="1" value="0" class="w-full p-3 bg-slate-950/60 border border-white/10 rounded-lg focus:outline-none focus:border-rose-500 text-white text-sm">
+                                </div>
+                                <div>
+                                    <label for="donorLastDonation" class="block text-xs font-semibold text-slate-300 mb-1">শেষ রক্তদানের তারিখ</label>
+                                    <input id="donorLastDonation" type="date" class="w-full p-3 bg-slate-950/60 border border-white/10 rounded-lg focus:outline-none focus:border-rose-500 text-white text-sm">
+                                </div>
+                                <div>
+                                    <label for="donorAge" class="block text-xs font-semibold text-slate-300 mb-1">বয়স</label>
+                                    <input id="donorAge" type="number" min="18" max="80" class="w-full p-3 bg-slate-950/60 border border-white/10 rounded-lg focus:outline-none focus:border-rose-500 text-white text-sm placeholder-slate-500" placeholder="যেমন: 24">
+                                </div>
+                                <div>
+                                    <label for="donorHealthNotes" class="block text-xs font-semibold text-slate-300 mb-1">স্বাস্থ্য/নোট</label>
+                                    <input id="donorHealthNotes" class="w-full p-3 bg-slate-950/60 border border-white/10 rounded-lg focus:outline-none focus:border-rose-500 text-white text-sm placeholder-slate-500" placeholder="কোনো বিশেষ রোগ/নোট থাকলে">
+                                </div>
+                            </div>
+
+                            <!-- Hospital Specific Fields -->
+                            <div id="hospitalFields" class="hidden grid sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="hospitalContactPerson" class="block text-xs font-semibold text-slate-300 mb-1">দায়িত্বপ্রাপ্ত ব্যক্তি</label>
+                                    <input id="hospitalContactPerson" class="w-full p-3 bg-slate-950/60 border border-white/10 rounded-lg focus:outline-none focus:border-rose-500 text-white text-sm placeholder-slate-500" placeholder="Admin/Manager name">
+                                </div>
+                                <div>
+                                    <label for="hospitalLicense" class="block text-xs font-semibold text-slate-300 mb-1">লাইসেন্স / রেজিস্ট্রেশন নম্বর</label>
+                                    <input id="hospitalLicense" class="w-full p-3 bg-slate-950/60 border border-white/10 rounded-lg focus:outline-none focus:border-rose-500 text-white text-sm placeholder-slate-500" placeholder="Medical registration no.">
+                                </div>
+                                <div>
+                                    <label for="hospitalIcu" class="block text-xs font-semibold text-slate-300 mb-1">ICU Bed</label>
+                                    <input id="hospitalIcu" type="number" min="0" step="1" value="0" class="w-full p-3 bg-slate-950/60 border border-white/10 rounded-lg focus:outline-none focus:border-rose-500 text-white text-sm">
+                                </div>
+                                <div>
+                                    <label for="hospitalEmergency" class="block text-xs font-semibold text-slate-300 mb-1">Emergency Bed</label>
+                                    <input id="hospitalEmergency" type="number" min="0" step="1" value="0" class="w-full p-3 bg-slate-950/60 border border-white/10 rounded-lg focus:outline-none focus:border-rose-500 text-white text-sm">
+                                </div>
+                            </div>
+
+                            <button type="submit" class="w-full bg-gradient-to-r from-rose-700 to-rose-600 hover:from-rose-600 hover:to-rose-500 text-white font-bold py-3 rounded-lg transition shadow-lg text-sm tracking-wide">
+                                রেজিস্ট্রেশন আবেদন জমা দিন
+                            </button>
+                            
+                            <div class="text-center mt-4 text-xs text-slate-400">
+                                <span class="cursor-pointer text-rose-400 hover:underline font-semibold" onclick="switchTab('login')">ইতিমধ্যে অ্যাকাউন্ট আছে? লগইন করুন</span>
+                            </div>
+                        </div>
+
+                        <!-- Interactive Map Section -->
+                        <div class="flex flex-col gap-3 min-h-[360px] lg:min-h-0" id="mapSection">
+                            <label class="block text-xs font-semibold text-slate-300">ম্যাপ থেকে সঠিক লোকেশন দিন</label>
+                            <div class="relative flex-1 rounded-xl overflow-hidden border border-white/10 shadow-lg min-h-[300px] bg-slate-950">
+                                <!-- Search box for map -->
+                                <div class="absolute top-3 left-3 right-3 z-20">
+                                    <input type="text" id="applyMapSearch" placeholder="🔍 জায়গা সার্চ করুন..." class="w-full px-4 py-2.5 rounded-lg border border-white/10 bg-slate-950/90 text-xs text-white placeholder-slate-400 shadow-xl focus:outline-none focus:border-rose-500">
+                                    <div class="map-search-results" id="applySearchResults"></div>
+                                </div>
+                                <!-- My Location button -->
+                                <button type="button" id="findLocationBtnInside" class="absolute bottom-3 left-3 z-20 flex items-center gap-2 bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-700 hover:to-rose-600 text-white px-4 py-2.5 rounded-lg font-bold text-[10px] uppercase tracking-wide shadow-lg transition">
+                                    📍 আমার অবস্থান খুঁজুন
+                                </button>
+                                <div id="locationMap" class="w-full h-full"></div>
+                            </div>
+                            <p id="selectedLocationText" class="text-xs font-medium text-slate-300 bg-slate-950/60 border border-white/5 rounded-lg p-3 shadow-sm flex items-start gap-2">
+                                <span>📍 ম্যাপে ক্লিক করে অথবা সার্চ করে লোকেশন সিলেক্ট করুন।</span>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Frontend Core and Mapbox logic -->
+    <script src="/js/notify.js"></script>
+    <script src="/js/bd-districts.js"></script>
+    <script src="/js/mapbox-utils.js"></script>
+    <script src="/js/apply.js"></script>
     <script src="/js/login.js"></script>
+
+    <!-- Tab Switching Animation and State Handler -->
+    <script>
+        const container = document.getElementById('authContainer');
+        const slider = document.getElementById('sliderWrapper');
+        const toggleBg = document.getElementById('toggleBg');
+        const tabLogin = document.getElementById('tabLogin');
+        const tabRegister = document.getElementById('tabRegister');
+        const loginPanel = document.getElementById('loginPanel');
+        const registerPanel = document.getElementById('registerPanel');
+
+        let activeTimeout = null;
+
+        function switchTab(tab, pushHistory = true) {
+            if (activeTimeout) clearTimeout(activeTimeout);
+
+            if (tab === 'login') {
+                loginPanel.classList.remove('h-0', 'overflow-hidden');
+
+                // Update CSS styling classes for Login State
+                container.classList.remove('max-w-6xl');
+                container.classList.add('max-w-md');
+                
+                slider.style.transform = 'translateX(0%)';
+                
+                // Toggle slide background active positions
+                toggleBg.classList.remove('left-[calc(50%+2px)]');
+                toggleBg.classList.add('left-1');
+                
+                // Tab buttons state colors
+                tabLogin.classList.remove('text-slate-400');
+                tabLogin.classList.add('text-white');
+                tabRegister.classList.remove('text-white');
+                tabRegister.classList.add('text-slate-400');
+
+                // Panel states & pointer events
+                loginPanel.classList.remove('opacity-0', 'pointer-events-none');
+                loginPanel.classList.add('opacity-100');
+                registerPanel.classList.remove('opacity-100');
+                registerPanel.classList.add('opacity-0', 'pointer-events-none');
+
+                if (pushHistory) {
+                    activeTimeout = setTimeout(() => {
+                        registerPanel.classList.add('h-0', 'overflow-hidden');
+                    }, 500);
+                } else {
+                    registerPanel.classList.add('h-0', 'overflow-hidden');
+                }
+
+                if (pushHistory) {
+                    window.history.pushState(null, '', '/login');
+                }
+            } else if (tab === 'register') {
+                registerPanel.classList.remove('h-0', 'overflow-hidden');
+
+                // Update CSS styling classes for Register State
+                container.classList.remove('max-w-md');
+                container.classList.add('max-w-6xl');
+                
+                slider.style.transform = 'translateX(-50%)';
+                
+                // Toggle slide background active positions
+                toggleBg.classList.remove('left-1');
+                toggleBg.classList.add('left-[calc(50%+2px)]');
+                
+                // Tab buttons state colors
+                tabLogin.classList.remove('text-white');
+                tabLogin.classList.add('text-slate-400');
+                tabRegister.classList.remove('text-slate-400');
+                tabRegister.classList.add('text-white');
+
+                // Panel states & pointer events
+                loginPanel.classList.remove('opacity-100');
+                loginPanel.classList.add('opacity-0', 'pointer-events-none');
+                registerPanel.classList.remove('opacity-0', 'pointer-events-none');
+                registerPanel.classList.add('opacity-100');
+
+                if (pushHistory) {
+                    activeTimeout = setTimeout(() => {
+                        loginPanel.classList.add('h-0', 'overflow-hidden');
+                    }, 500);
+                } else {
+                    loginPanel.classList.add('h-0', 'overflow-hidden');
+                }
+
+                // Trigger Map Resize to prevent mapbox rendering issues inside transition parent
+                setTimeout(() => {
+                    if (window.map && typeof window.map.resize === 'function') {
+                        window.map.resize();
+                    }
+                }, 200);
+
+                if (pushHistory) {
+                    window.history.pushState(null, '', '/apply');
+                }
+            }
+        }
+
+        // Add Click Handlers for Tabs
+        tabLogin.addEventListener('click', () => switchTab('login'));
+        tabRegister.addEventListener('click', () => switchTab('register'));
+
+        // ResizeObserver to continuously update Mapbox canvas size during container transition
+        try {
+            const mapEl = document.getElementById('locationMap');
+            if (mapEl) {
+                const ro = new ResizeObserver(() => {
+                    if (window.map && typeof window.map.resize === 'function') {
+                        window.map.resize();
+                    }
+                });
+                ro.observe(mapEl);
+            }
+        } catch (e) {
+            console.error('ResizeObserver error:', e);
+        }
+
+        // Handle browser Back/Forward navigation popState
+        window.addEventListener('popstate', () => {
+            if (window.location.pathname.endsWith('/apply') || window.location.pathname.endsWith('/apply.html')) {
+                switchTab('register', false);
+            } else {
+                switchTab('login', false);
+            }
+        });
+
+        // Initialize state on page load based on pathname
+        window.addEventListener('DOMContentLoaded', () => {
+            // Apply slight initial transition delay to prevent initial layout pop on pageload
+            setTimeout(() => {
+                if (window.location.pathname.endsWith('/apply') || window.location.pathname.endsWith('/apply.html')) {
+                    switchTab('register', false);
+                } else {
+                    switchTab('login', false);
+                }
+            }, 50);
+        });
+    </script>
 </body>
 </html>

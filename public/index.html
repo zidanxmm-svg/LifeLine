@@ -99,6 +99,12 @@
             box-shadow: 0 4px 14px var(--red-glow);
         }
         .nav-btn-red:hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--red-glow); }
+        .nav-btn-active {
+            color: rgba(255,255,255,0.75);
+            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.07);
+        }
+        .nav-btn-active:hover { background: rgba(255,255,255,0.12); color: #fff; border-color: rgba(255,255,255,0.3); }
 
         /* ── HERO SECTION ── */
         .hero {
@@ -129,12 +135,13 @@
         .hero-title {
             font-family: 'Inter', sans-serif;
             font-size: clamp(2.2rem, 6vw, 4rem);
-            font-weight: 900; line-height: 1.1;
+            font-weight: 900; line-height: 1.28;
             margin-bottom: 22px;
             animation: fadeInDown 0.7s ease 0.1s both;
         }
         .hero-title .line2 {
             display: block;
+            margin-top: 8px;
             background: linear-gradient(135deg, #f43f5e, #fb923c);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -169,6 +176,7 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 24px; max-width: 1200px; width: 100%;
+            align-items: stretch;
             animation: fadeInUp 0.9s ease 0.35s both;
         }
 
@@ -371,10 +379,10 @@
             <span class="logo-text">Life<span>Line</span></span>
         </a>
         <div class="nav-links">
-            <a href="/doctors.html" class="nav-btn nav-btn-ghost" style="color: #34d399; border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.05);">🩺 ডাক্তার সিরিয়াল</a>
-            <a href="/apply.html" class="nav-btn nav-btn-ghost">আবেদন করুন</a>
-            <a href="/medical-centers.html" class="nav-btn nav-btn-active">🏥 Medical Centers</a>
-            <a href="/login.html" id="loginBtn" class="nav-btn nav-btn-red">লগিন করুন</a>
+            <a href="/doctors" class="nav-btn nav-btn-ghost" style="color: #34d399; border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.05);">🩺 ডাক্তার সিরিয়াল</a>
+            <!-- <a href="/apply" class="nav-btn nav-btn-ghost">আবেদন করুন</a> -->
+            <a href="/medical-centers" class="nav-btn nav-btn-active">🏥 Medical Centers</a>
+            <a href="/login" id="loginBtn" class="nav-btn nav-btn-red">লগইন / রেজিস্টার</a>
         </div>
     </div>
 </nav>
@@ -419,7 +427,7 @@
     <div class="features-grid">
 
         <!-- Blood Request Card -->
-        <a href="/blood-request.html" class="feature-card card-blood" id="btn-blood-request">
+        <a href="/blood-request" class="feature-card card-blood" id="btn-blood-request">
             <div class="card-deco"></div>
             <div class="card-deco2"></div>
             <div class="card-icon-wrap">🩸</div>
@@ -434,11 +442,11 @@
         </a>
 
         <!-- Hospital Bed Card -->
-        <a href="/hospital-beds.html" class="feature-card card-hospital" id="btn-hospital-beds">
+        <a href="/hospital-beds" class="feature-card card-hospital" id="btn-hospital-beds">
             <div class="card-deco"></div>
             <div class="card-deco2"></div>
             <div class="card-icon-wrap">🏥</div>
-            <div class="card-heading">হাসপাতাল বেড স্ট্যাটাস</div>
+            <div class="card-heading">লাইভ লাইভ হাসপাতাল বেড স্ট্যাটাস</div>
             <p class="card-desc">
                 কাছের হাসপাতালে ICU ও ইমার্জেন্সি বেডের লাইভ তথ্য দেখুন। সঠিক হাসপাতাল বেছে নিন।
             </p>
@@ -449,7 +457,7 @@
         </a>
 
         <!-- Doctor Appointment Card -->
-        <a href="/doctors.html" class="feature-card card-doctor" id="btn-doctor">
+        <a href="/doctors" class="feature-card card-doctor" id="btn-doctor">
             <div class="card-deco"></div>
             <div class="card-deco2"></div>
             <div class="card-icon-wrap">👨‍⚕️</div>
@@ -467,10 +475,10 @@
 
     <!-- Quick Links -->
     <div class="quick-links">
-        <a href="/apply.html" class="quick-link">📝 ডোনার হিসেবে নিবন্ধন করুন</a>
-        <a href="/doctors.html" class="quick-link">🩺 ডাক্তার অ্যাপয়েন্টমেন্ট নিন</a>
-        <a href="/request-status.html" class="quick-link">🔍 আবেদনের অবস্থা দেখুন</a>
-        <a href="/login.html" class="quick-link">🔐 ড্যাশবোর্ডে প্রবেশ করুন</a>
+        <a href="/apply" class="quick-link">📝 ডোনার হিসেবে নিবন্ধন করুন</a>
+        <a href="/doctors" class="quick-link">🩺 ডাক্তার অ্যাপয়েন্টমেন্ট নিন</a>
+        <a href="/request-status" class="quick-link">🔍 আবেদনের অবস্থা দেখুন</a>
+        <a href="/login" class="quick-link">🔐 ড্যাশবোর্ডে প্রবেশ করুন</a>
     </div>
 
 </section>
@@ -556,17 +564,15 @@
     // Super Admin
     if (role === 'superadmin' && masterKey) {
         loginBtn.textContent = 'ড্যাশবোর্ড';
-        loginBtn.href = '/master-dashboard.html';
+        loginBtn.href = '/admin-panel';
         return;
     }
 
     // Donor / Hospital
-    if ((role === 'donor' || role === 'hospital') && userData) {
+    if ((role === 'donor' || role === 'hospital' || role === 'doctor') && userData) {
         loginBtn.textContent = 'ড্যাশবোর্ড';
-
-        loginBtn.href = role === 'donor'
-            ? '/donor-dashboard.html'
-            : '/hospital-dashboard.html';
+        const dashMap = { donor: '/donor-panel', hospital: '/hospital-panel', doctor: '/dr-panel' };
+        loginBtn.href = dashMap[role] || '/login';
     }
 })();
 </script>

@@ -21,7 +21,7 @@ document.getElementById('rootLoginForm').addEventListener('submit', async (e) =>
             localStorage.setItem('userRole', 'superadmin');
             localStorage.setItem('masterKey', masterKey);
             await showPopup('Root access verified successfully.', 'success', { title: 'ACCESS GRANTED' });
-            window.location.href = '/master-dashboard.html';
+            window.location.href = '/admin-panel';
         } else {
             await showPopup(result.message, 'error', { title: 'ACCESS DENIED' });
         }

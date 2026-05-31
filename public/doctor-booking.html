@@ -196,7 +196,7 @@
 <body>
     <header>
         <div class="header-container">
-            <a href="doctors.html" class="logo">
+            <a href="doctors" class="logo">
                 <i class="fas fa-arrow-left"></i> LifeLine Booking
             </a>
         </div>
@@ -634,7 +634,7 @@
             </div>
             <div id="receiptBody"></div>
             <button class="btn-book" style="margin-top:2rem;" onclick="downloadPDF()"><i class="fas fa-download"></i> রশিদ ডাউনলোড করুন (PDF)</button>
-            <button class="btn-book" style="margin-top:1rem; background:var(--text-muted);" onclick="window.location.href='doctors.html'">ফিরে যান</button>
+            <button class="btn-book" style="margin-top:1rem; background:var(--text-muted);" onclick="window.location.href='doctors'">ফিরে যান</button>
         </div>
     </div>
 
@@ -793,7 +793,7 @@
         async function loadDetails() {
             if(!docId || !chamberId) {
                 alert('Invalid parameters');
-                window.location.href = 'doctors.html';
+                window.location.href = 'doctors';
                 return;
             }
 
@@ -848,7 +848,7 @@
 
             } catch(e) {
                 alert('Details not found');
-                window.location.href = 'doctors.html';
+                window.location.href = 'doctors';
             }
         }
 

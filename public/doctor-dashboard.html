@@ -17,6 +17,16 @@
         }
         .hidden { display: none !important; }
     </style>
+    <script>
+        // Immediate redirect if not logged in as doctor
+        (function checkAuth() {
+            const role = localStorage.getItem('userRole');
+            const data = localStorage.getItem('userData') || localStorage.getItem('doctorUser');
+            if (role !== 'doctor' || !data) {
+                window.location.replace('/login');
+            }
+        })();
+    </script>
 </head>
 <body>
     <header>
@@ -30,26 +40,8 @@
         </div>
     </header>
 
-    <!-- Login View -->
-    <div class="container" id="loginView">
-        <div class="login-container">
-            <h2 style="text-align:center; margin-bottom:1.5rem;">ডাক্তার লগিন</h2>
-            <form id="loginForm" onsubmit="handleLogin(event)">
-                <div class="form-group">
-                    <label>ইউজারনেম</label>
-                    <input type="text" id="lUsername" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label>পাসওয়ার্ড</label>
-                    <input type="password" id="lPassword" class="form-control" required>
-                </div>
-                <button type="submit" class="btn-book" id="btnLogin">লগিন করুন</button>
-            </form>
-        </div>
-    </div>
-
     <!-- Dashboard View -->
-    <div class="container hidden" id="dashboardView">
+    <div class="container" id="dashboardView">
         <div class="dashboard-grid">
             <div class="sidebar">
                 <div style="text-align:center; margin-bottom:2rem;">
@@ -71,7 +63,40 @@
             <div class="main-content">
                 <!-- Appointments Tab -->
                 <div id="tab-appointments">
-                    <h2 style="margin-bottom:1.5rem;">আপনার সিরিয়াল / অ্যাপয়েন্টমেন্টস</h2>
+                    <h2 style="margin-bottom:1.5rem;">আপনার সিরিয়াল ও রোগীদের কিউ (Queue)</h2>
+                    
+                    <!-- Stats Strip (EMR Widgets) -->
+                    <div class="stats-strip">
+                        <div class="stat-widget">
+                            <div class="stat-icon-box waiting"><i class="fas fa-clock"></i></div>
+                            <div class="stat-info">
+                                <h4>অপেক্ষমান রোগী</h4>
+                                <p id="statPendingCount">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-widget">
+                            <div class="stat-icon-box checked"><i class="fas fa-check-circle"></i></div>
+                            <div class="stat-info">
+                                <h4>দেখা শেষ</h4>
+                                <p id="statCompletedCount">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-widget">
+                            <div class="stat-icon-box cancelled"><i class="fas fa-times-circle"></i></div>
+                            <div class="stat-info">
+                                <h4>বাতিল সিরিয়াল</h4>
+                                <p id="statCancelledCount">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-widget">
+                            <div class="stat-icon-box total"><i class="fas fa-users"></i></div>
+                            <div class="stat-info">
+                                <h4>মোট রোগী (আজ)</h4>
+                                <p id="statTotalCount">0</p>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="dash-card" style="margin-bottom: 2rem; border-left: 4px solid var(--primary-color);">
                         <div style="display:flex; gap:1rem; align-items:flex-end;">
                             <div class="form-group" style="margin:0; flex:1;">
@@ -384,8 +409,9 @@
 
                 <!-- Profile Update Tab -->
                 <div id="tab-profile" class="hidden">
-                    <h2 style="margin-bottom:1.5rem;">প্রোফাইল আপডেট করুন</h2>
+                    <h2 style="margin-bottom:1.5rem;">প্রোফাইল ও নিরাপত্তা সেটিংস</h2>
                     <div class="dash-card" style="max-width: 600px;">
+                        <h3 style="margin-bottom:1.2rem; font-size: 1.25rem; color: var(--primary-dark); display: flex; align-items: center; gap: 0.5rem;"><i class="fas fa-user-edit"></i> যোগাযোগের তথ্য ও ভিজিট ফি</h3>
                         <form id="profileForm" onsubmit="updateProfile(event)">
                             <div class="form-group">
                                 <label>যোগাযোগের নাম্বার</label>
@@ -400,7 +426,29 @@
                                 <textarea id="pDiseases" class="form-control" rows="3" placeholder="যেমন: হৃদরোগ, উচ্চ রক্তচাপ, ডায়াবেটিস"></textarea>
                             </div>
 
-                            <button type="submit" class="btn-book" id="btnUpdateProfile">আপডেট করুন</button>
+                            <button type="submit" class="btn-book" id="btnUpdateProfile">প্রোফাইল আপডেট করুন</button>
+                        </form>
+                    </div>
+
+                    <!-- Security & Password Change Section (Merged here to prevent sidebar clutter) -->
+                    <div class="dash-card" style="max-width: 600px; margin-top: 1.5rem;">
+                        <h3 style="margin-bottom:1.2rem; font-size: 1.25rem; color: var(--primary-dark); display: flex; align-items: center; gap: 0.5rem;"><i class="fas fa-lock"></i> অ্যাকাউন্ট পাসওয়ার্ড পরিবর্তন</h3>
+                        <form id="doctorPwForm" onsubmit="submitDoctorPwChange(event)">
+                            <div class="form-group">
+                                <label>বর্তমান পাসওয়ার্ড</label>
+                                <input type="password" id="dpw_current" class="form-control" placeholder="বর্তমান পাসওয়ার্ড দিন" required>
+                            </div>
+                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+                                <div class="form-group">
+                                    <label>নতুন পাসওয়ার্ড <small style="color:var(--text-muted); font-size: 0.75rem;">(কমপক্ষে ৬ অক্ষর)</small></label>
+                                    <input type="password" id="dpw_new" class="form-control" placeholder="নতুন পাসওয়ার্ড" minlength="6" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>নতুন পাসওয়ার্ড নিশ্চিত করুন</label>
+                                    <input type="password" id="dpw_confirm" class="form-control" placeholder="পাসওয়ার্ড পুনরায় দিন" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-book" id="btnDoctorPw" style="width: auto; padding: 0.6rem 1.5rem;">পাসওয়ার্ড পরিবর্তন করুন</button>
                         </form>
                     </div>
                 </div>
@@ -413,50 +461,19 @@
         let currentUser = null;
 
         window.onload = () => {
-            const stored = localStorage.getItem('doctorUser');
-            if(stored) {
+            const stored = localStorage.getItem('userData') || localStorage.getItem('doctorUser');
+            if (stored) {
                 currentUser = JSON.parse(stored);
+                // Ensure doctorUser is sync'ed for compatibility with legacy calls
+                localStorage.setItem('doctorUser', stored);
+                localStorage.setItem('userRole', 'doctor');
                 showDashboard();
+            } else {
+                window.location.replace('/login');
             }
         };
 
-        async function handleLogin(e) {
-            e.preventDefault();
-            const btn = document.getElementById('btnLogin');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-            btn.disabled = true;
-
-            const payload = {
-                username: document.getElementById('lUsername').value,
-                password: document.getElementById('lPassword').value
-            };
-
-            try {
-                const res = await fetch('/api/doctor/login', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(payload)
-                });
-                const data = await res.json();
-                
-                if(data.success) {
-                    localStorage.setItem('doctorUser', JSON.stringify(data.doctorData));
-                    currentUser = data.doctorData;
-                    showDashboard();
-                } else {
-                    alert(data.message);
-                }
-            } catch(e) {
-                alert('সার্ভার এরর');
-            }
-            
-            btn.innerHTML = 'লগিন করুন';
-            btn.disabled = false;
-        }
-
         function showDashboard() {
-            document.getElementById('loginView').classList.add('hidden');
-            document.getElementById('dashboardView').classList.remove('hidden');
             document.getElementById('logoutNav').style.display = 'block';
             
             document.getElementById('docNameDisplay').innerText = currentUser.name;
@@ -475,7 +492,10 @@
 
         function logout() {
             localStorage.removeItem('doctorUser');
-            window.location.reload();
+            localStorage.removeItem('userData');
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('token');
+            window.location.replace('/login');
         }
 
         function formatBanglaTime(timeString) {
@@ -568,40 +588,90 @@
             document.getElementById('countCompleted').innerText = completed.length;
             document.getElementById('countCancelled').innerText = cancelled.length;
             
+            // Update EMR stats strip counters
+            document.getElementById('statPendingCount').innerText = pending.length;
+            document.getElementById('statCompletedCount').innerText = completed.length;
+            document.getElementById('statCancelledCount').innerText = cancelled.length;
+            document.getElementById('statTotalCount').innerText = pending.length + completed.length + cancelled.length;
+            
             const renderTable = (list, isCancelled, isCompleted) => {
                 if(list.length === 0) {
-                    return `<tr><td colspan="7" style="text-align:center; padding: 2rem 0; color: #94a3b8;">কোনো অ্যাপয়েন্টমেন্ট নেই।</td></tr>`;
+                    return `<tr><td colspan="7" style="text-align:center; padding: 2rem 0; color: var(--text-muted);">কোনো অ্যাপয়েন্টমেন্ট পাওয়া যায়নি।</td></tr>`;
                 }
-                return list.map(app => `
-                    <tr style="${isCancelled ? 'opacity:0.6;' : ''}">
+                return list.map(app => {
+                    const firstChar = app.patient_name ? app.patient_name[0].toUpperCase() : 'P';
+                    let statusBadge = '';
+                    if (isCompleted) {
+                        statusBadge = '<span class="badge completed">Checked</span>';
+                    } else if (isCancelled) {
+                        statusBadge = '<span class="badge cancelled">Cancelled</span>';
+                    } else {
+                        statusBadge = '<span class="badge confirmed">Waiting</span>';
+                    }
+
+                    return `
+                    <tr style="${isCancelled ? 'opacity:0.55; background: rgba(225,29,72,0.01);' : ''}">
                         <td>
-                            <strong>${app.appointment_date_formatted}</strong><br>
-                            <span class="text-muted"><i class="far fa-clock"></i> ${formatBanglaTime(app.appointment_time)}</span><br>
-                            <small class="text-muted">${app.clinic_name}</small>
+                            <div style="font-weight: 600; color: var(--text-main);">${app.appointment_date_formatted}</div>
+                            <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">
+                                <i class="far fa-clock"></i> ${formatBanglaTime(app.appointment_time)}
+                            </div>
+                            <div style="font-size: 0.78rem; color: var(--primary-color); font-weight: 500; margin-top: 2px;">
+                                <i class="fas fa-hospital"></i> ${app.clinic_name}
+                            </div>
                         </td>
-                        <td><span class="badge confirmed" style="font-size:1.1rem; ${isCompleted ? 'background:#e2fbe8; color:#1e7e34; border-color:#c3e6cb;' : ''}"># ${app.serial_number}</span></td>
-                        <td>
-                            <strong>${app.patient_name}</strong><br>
-                            <span class="text-muted"><i class="fas fa-phone-alt" style="font-size:0.8rem"></i> ${app.patient_phone}</span>
-                        </td>
-                        <td>${app.patient_age} বছর, ${app.patient_gender === 'Male' ? 'পুরুষ' : app.patient_gender === 'Female' ? 'মহিলা' : 'অন্যান্য'}</td>
-                        <td><small>${app.patient_problem || '-'}</small></td>
-                        <td>
-                            <span class="badge bg-success">৳ ${app.payment_amount} Paid</span><br>
-                            <small class="text-muted">Trx: ${app.trx_id}</small>
+                        <td style="text-align: center;">
+                            <span class="serial-badge" style="${isCompleted ? 'background: #e8f5e9; border-color: #a5d6a7; color: #2e7d32;' : ''}">
+                                ${app.serial_number}
+                            </span>
                         </td>
                         <td>
-                            <select onchange="updateAppointmentStatus(${app.id}, this.value)" class="form-control" style="width:auto; padding:0.2rem; font-size:0.9rem; margin-bottom:0.5rem;" ${isCancelled ? 'disabled' : ''}>
-                                <option value="Confirmed" ${app.status === 'Confirmed' || app.status === 'Pending' || !app.status ? 'selected' : ''}>অপেক্ষমান</option>
-                                <option value="Completed" ${app.status === 'Completed' ? 'selected' : ''}>দেখা শেষ</option>
-                                <option value="Cancelled" ${app.status === 'Cancelled' ? 'selected' : ''}>বাতিল</option>
-                            </select>
-                            <button onclick="printPrescription(${app.id})" class="btn-book" style="padding:0.2rem 0.5rem; font-size:0.8rem; width:100%; margin-bottom:0.5rem;"><i class="fas fa-print"></i> প্রেসক্রিপশন</button>
-                            <button onclick="printTestReferral(${app.id})" class="btn-book" style="background:#8e44ad; padding:0.2rem 0.5rem; font-size:0.8rem; width:100%; margin-bottom:0.5rem;"><i class="fas fa-file-medical"></i> টেস্ট রেফারাল</button>
-                            <button onclick="deleteAppointment(${app.id})" class="btn-book" style="background:var(--danger); padding:0.2rem 0.5rem; font-size:0.8rem; width:100%;"><i class="fas fa-trash"></i> ডিলিট</button>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span class="patient-avatar">${firstChar}</span>
+                                <div>
+                                    <div style="font-weight: 600; color: var(--text-main);">${app.patient_name}</div>
+                                    <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 1px;">
+                                        <i class="fas fa-phone-alt"></i> ${app.patient_phone}
+                                    </div>
+                                </div>
+                            </div>
                         </td>
-                    </tr>
-                `).join('');
+                        <td>
+                            <div style="font-weight: 500;">${app.patient_age} বছর</div>
+                            <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 1px;">
+                                ${app.patient_gender === 'Male' ? 'পুরুষ' : app.patient_gender === 'Female' ? 'মহিলা' : 'অন্যান্য'}
+                            </div>
+                        </td>
+                        <td>
+                            <div style="max-width: 180px; font-size: 0.85rem; line-height: 1.4; color: var(--text-main); word-break: break-word;">
+                                ${app.patient_problem || '<span style="color:var(--text-muted); font-style:italic;">কোনো সমস্যা উল্লেখ নেই</span>'}
+                            </div>
+                        </td>
+                        <td>
+                            <div style="font-weight: 700; color: var(--accent);">৳ ${app.payment_amount}</div>
+                            <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;">Trx: ${app.trx_id}</div>
+                            <div style="margin-top: 3px;">${statusBadge}</div>
+                        </td>
+                        <td>
+                            <div style="display: flex; flex-direction: column; gap: 6px; max-width: 130px;">
+                                <select onchange="updateAppointmentStatus(${app.id}, this.value)" class="form-control" style="padding: 0.3rem 0.5rem; font-size: 0.85rem;" ${isCancelled ? 'disabled' : ''}>
+                                    <option value="Confirmed" ${app.status === 'Confirmed' || app.status === 'Pending' || !app.status ? 'selected' : ''}>অপেক্ষমান</option>
+                                    <option value="Completed" ${app.status === 'Completed' ? 'selected' : ''}>দেখা শেষ</option>
+                                    <option value="Cancelled" ${app.status === 'Cancelled' ? 'selected' : ''}>বাতিল</option>
+                                </select>
+                                <button onclick="printPrescription(${app.id})" class="btn-book" style="padding: 0.35rem; font-size: 0.8rem; font-weight: 500;">
+                                    <i class="fas fa-file-prescription"></i> প্রেসক্রিপশন
+                                </button>
+                                <button onclick="printTestReferral(${app.id})" class="btn-book" style="background: #7c3aed; padding: 0.35rem; font-size: 0.8rem; font-weight: 500;">
+                                    <i class="fas fa-file-medical"></i> টেস্ট রেফারাল
+                                </button>
+                                <button onclick="deleteAppointment(${app.id})" class="btn-book" style="background: var(--danger); padding: 0.35rem; font-size: 0.8rem; font-weight: 500;">
+                                    <i class="fas fa-trash"></i> মুছুন
+                                </button>
+                            </div>
+                        </td>
+                    </tr>`;
+                }).join('');
             };
             
             document.querySelector('#tablePending tbody').innerHTML = renderTable(pending, false, false);
@@ -1113,6 +1183,35 @@
                 if((await res.json()).success) loadOverrides();
             } catch(e) {
                 alert('সার্ভার এরর');
+            }
+        }
+
+        async function submitDoctorPwChange(e) {
+            e.preventDefault();
+            const cur = document.getElementById('dpw_current').value;
+            const nw  = document.getElementById('dpw_new').value;
+            const con = document.getElementById('dpw_confirm').value;
+            if (nw !== con) { alert('নতুন পাসওয়ার্ড মিলছে না'); return; }
+            const btn = document.getElementById('btnDoctorPw');
+            btn.textContent = 'পরিবর্তন হচ্ছে...'; btn.disabled = true;
+            try {
+                const res = await fetch('/api/doctor/change-password', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ doctorId: currentUser.id, currentPassword: cur, newPassword: nw })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert(data.message);
+                    document.getElementById('doctorPwForm').reset();
+                } else {
+                    alert(data.message);
+                }
+            } catch(err) {
+                alert('সার্ভার এরর');
+            } finally {
+                btn.textContent = 'পাসওয়ার্ড পরিবর্তন করুন';
+                btn.disabled = false;
             }
         }
     </script>

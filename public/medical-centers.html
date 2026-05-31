@@ -3,120 +3,363 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medical Centers — LifeLine</title>
+    <title>লাইভ হাসপাতাল বেড স্ট্যাটাস — LifeLine</title>
     <meta name="description" content="বাংলাদেশের হাসপাতালগুলোর ICU, ইমার্জেন্সি ও সাধারণ বেডের লাইভ তথ্য দেখুন।">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+        
         :root{
-            --red:#e11d48;--red-dark:#be123c;--red-glow:rgba(225,29,72,.35);
-            --blue:#1d4ed8;--blue-glow:rgba(29,78,216,.35);
-            --green:#16a34a;--amber:#d97706;
-            --dark:#0f172a;--gray:#64748b;
-            --border:rgba(255,255,255,.1);
+            --red: #f43f5e;
+            --red-dark: #be123c;
+            --red-glow: rgba(244, 63, 94, 0.25);
+            --blue: #3b82f6;
+            --blue-dark: #1d4ed8;
+            --blue-glow: rgba(59, 130, 246, 0.25);
+            --green: #10b981;
+            --green-dim: rgba(16, 185, 129, 0.08);
+            --amber: #f59e0b;
+            --amber-dim: rgba(245, 158, 11, 0.08);
+            --rose: #f43f5e;
+            --rose-dim: rgba(244, 63, 94, 0.08);
+            --border: rgba(255, 255, 255, 0.08);
+            --bg: #030712;
+            --surface: rgba(255, 255, 255, 0.02);
+            --surface-hover: rgba(255, 255, 255, 0.04);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
         }
+
         html{scroll-behavior:smooth;}
-        body{font-family:'Hind Siliguri','Inter',sans-serif;background:#060b18;color:#fff;min-height:100vh;overflow-x:hidden;}
-        body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 20% 20%,rgba(190,18,60,.12) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 80% 80%,rgba(29,78,216,.10) 0%,transparent 60%);z-index:0;pointer-events:none;}
+        body{
+            font-family: 'Hind Siliguri', 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        body::before{
+            content:'';
+            position:fixed;
+            inset:0;
+            background: radial-gradient(circle at 15% 15%, rgba(244, 63, 94, 0.07) 0%, transparent 50%),
+                        radial-gradient(circle at 85% 85%, rgba(59, 130, 246, 0.07) 0%, transparent 50%);
+            z-index: 0;
+            pointer-events:none;
+        }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 99px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.2); }
 
         /* NAV */
-        nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(6,11,24,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+        nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(3,7,18,.8);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);}
         .nav-inner{max-width:1200px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:70px;}
         .nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none;}
         .logo-icon{width:42px;height:42px;background:linear-gradient(135deg,var(--red-dark),var(--red));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;box-shadow:0 4px 16px var(--red-glow);}
-        .logo-text{font-family:'Inter',sans-serif;font-size:1.6rem;font-weight:900;color:#fff;}
+        .logo-text{font-family:'Outfit',sans-serif;font-size:1.6rem;font-weight:900;color:#fff;}
         .logo-text span{color:var(--red);}
-        .nav-links{display:flex;align-items:center;gap:10px;}
-        .nav-btn{padding:9px 20px;border-radius:10px;font-weight:600;font-size:.88rem;text-decoration:none;transition:all .25s;font-family:'Hind Siliguri',sans-serif;}
-        .nav-btn-ghost{color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);}
-        .nav-btn-ghost:hover{background:rgba(255,255,255,.12);color:#fff;}
-        .nav-btn-active{color:#fff;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.12);}
-        .nav-btn-red{background:linear-gradient(135deg,var(--red-dark),var(--red));color:#fff;border:none;box-shadow:0 4px 14px var(--red-glow);}
+        .nav-links{display:flex;align-items:center;gap:12px;}
+        .nav-btn{padding:10px 22px;border-radius:12px;font-weight:600;font-size:.88rem;text-decoration:none;transition:all .25s;font-family:'Hind Siliguri',sans-serif;}
+        .nav-btn-ghost{color:rgba(255,255,255,.8);border:1.5px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03);}
+        .nav-btn-ghost:hover{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.2);}
+        .nav-btn-active{color:#fff;border:1.5px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);box-shadow: 0 4px 12px rgba(255,255,255,.02);}
+        .nav-btn-red{background:linear-gradient(135deg,var(--red-dark),var(--red));color:#fff;border:none;box-shadow:0 4px 14px var(--red-glow);font-weight:700;}
         .nav-btn-red:hover{transform:translateY(-2px);box-shadow:0 6px 20px var(--red-glow);}
 
         /* HERO */
-        .hero{position:relative;z-index:1;padding:110px 1.5rem 60px;text-align:center;}
-        .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(29,78,216,.15);border:1px solid rgba(29,78,216,.35);border-radius:100px;padding:8px 20px;font-size:.85rem;color:#93c5fd;margin-bottom:24px;}
-        .badge-dot{width:7px;height:7px;border-radius:50%;background:var(--blue);animation:blink 1.5s infinite;}
-        @keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
-        .hero h1{font-family:'Inter',sans-serif;font-size:clamp(1.8rem,5vw,3rem);font-weight:900;margin-bottom:16px;}
+        .hero{position:relative;z-index:1;padding:130px 1.5rem 60px;text-align:center;}
+        .hero-badge{
+            display:inline-flex;
+            align-items:center;
+            gap:8px;
+            background:rgba(59,130,246,.12);
+            border:1px solid rgba(59,130,246,.25);
+            border-radius:100px;
+            padding:8px 20px;
+            font-size:.82rem;
+            color:#93c5fd;
+            margin-bottom:24px;
+            font-weight: 600;
+            letter-spacing: .02em;
+        }
+        .badge-dot{width:8px;height:8px;border-radius:50%;background:#3b82f6;animation:blink 1.8s ease-in-out infinite;}
+        @keyframes blink{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.25;transform:scale(0.8);}}
+        .hero h1{font-family:'Outfit',sans-serif;font-size:clamp(2rem,5.5vw,3.5rem);font-weight:900;margin-bottom:18px;letter-spacing: -.02em;line-height:1.2;}
         .hero h1 span{background:linear-gradient(135deg,#60a5fa,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-        .hero p{font-size:1rem;color:rgba(255,255,255,.6);max-width:560px;margin:0 auto 36px;line-height:1.8;}
+        .hero p{font-size:1.05rem;color:rgba(255,255,255,.65);max-width:580px;margin:0 auto 36px;line-height:1.75;}
 
-        /* STATS ROW */
-        .stats-row{display:flex;justify-content:center;gap:40px;flex-wrap:wrap;margin-bottom:48px;}
-        .stat-item{text-align:center;}
-        .stat-num{font-family:'Inter',sans-serif;font-size:2rem;font-weight:900;background:linear-gradient(135deg,#fff,rgba(255,255,255,.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-        .stat-label{font-size:.82rem;color:rgba(255,255,255,.5);margin-top:4px;}
+        /* STATS GRID HERO */
+        .stats-grid-hero {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            max-width: 1100px;
+            margin: 2rem auto 0;
+            padding: 0 1rem;
+        }
+        .stat-box-hero {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            backdrop-filter: blur(12px);
+            transition: transform 0.25s, border-color 0.25s, background 0.25s;
+            text-align: left;
+        }
+        .stat-box-hero:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .stat-box-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+            flex-shrink: 0;
+        }
+        .stat-num {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.7rem;
+            font-weight: 800;
+            line-height: 1.1;
+        }
+        .stat-label {
+            font-size: .8rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 2px;
+            font-weight: 500;
+        }
 
-        /* SEARCH + FILTER */
-        .controls{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:0 1.5rem 32px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
-        .search-box{flex:1;min-width:220px;position:relative;}
-        .search-box input{width:100%;padding:12px 16px 12px 42px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;font-size:.9rem;font-family:inherit;outline:none;transition:all .25s;}
-        .search-box input::placeholder{color:rgba(255,255,255,.4);}
-        .search-box input:focus{border-color:rgba(29,78,216,.6);background:rgba(255,255,255,.09);}
-        .search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:1rem;color:rgba(255,255,255,.4);}
-        .filter-select{padding:12px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;font-size:.88rem;font-family:inherit;outline:none;cursor:pointer;}
-        .filter-select option{background:#0f172a;color:#fff;}
-        .refresh-btn{padding:12px 20px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:rgba(255,255,255,.8);font-size:.88rem;cursor:pointer;font-family:inherit;transition:all .25s;white-space:nowrap;}
-        .refresh-btn:hover{background:rgba(255,255,255,.12);color:#fff;}
+        /* CONTROLS */
+        .controls{
+            position:relative;
+            z-index:1;
+            max-width:1200px;
+            margin:0 auto 36px;
+            padding:20px 24px;
+            display:flex;
+            gap:16px;
+            flex-wrap:wrap;
+            align-items:center;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(12px);
+        }
+        .search-box{flex:1;min-width:240px;position:relative;}
+        .search-box input{
+            width:100%;
+            padding:12px 16px 12px 42px;
+            border-radius:12px;
+            border:1.5px solid rgba(255,255,255,.08);
+            background:rgba(255,255,255,.03);
+            color:#fff;
+            font-size:.9rem;
+            font-family:inherit;
+            outline:none;
+            transition:all .25s;
+        }
+        .search-box input::placeholder{color:rgba(255,255,255,.35);}
+        .search-box input:focus{
+            border-color:var(--blue);
+            background:rgba(255,255,255,.06);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+        .search-icon{position:absolute;left:15px;top:50%;transform:translateY(-50%);font-size:.95rem;color:rgba(255,255,255,.45);}
+        .filter-select{
+            padding:12px 20px;
+            border-radius:12px;
+            border:1.5px solid rgba(255,255,255,.08);
+            background:rgba(255,255,255,.03);
+            color:#fff;
+            font-size:.88rem;
+            font-family:inherit;
+            outline:none;
+            cursor:pointer;
+            transition:all .25s;
+        }
+        .filter-select:focus{
+            border-color:var(--blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+        .filter-select option{background:#0e121e;color:#fff;}
+        .refresh-btn{
+            padding:12px 24px;
+            border-radius:12px;
+            border:1.5px solid rgba(255, 255, 255, 0.12);
+            background:rgba(255, 255, 255, 0.04);
+            color:rgba(255, 255, 255, 0.85);
+            font-size:.88rem;
+            cursor:pointer;
+            font-family:inherit;
+            transition:all .25s;
+            white-space:nowrap;
+            font-weight:600;
+            display:flex;
+            align-items:center;
+            gap:8px;
+        }
+        .refresh-btn:hover{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.2);}
 
         /* HOSPITAL GRID */
-        .hosp-grid{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:0 1.5rem 80px;display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px;}
+        .hosp-grid{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:0 1.5rem 80px;display:grid;grid-template-columns:repeat(auto-fill,minmax(350px,1fr));gap:24px;}
 
         /* HOSPITAL CARD */
-        .hosp-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:24px;transition:all .3s;position:relative;overflow:hidden;}
-        .hosp-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:20px 20px 0 0;}
-        .hosp-card.has-beds::before{background:linear-gradient(90deg,#16a34a,#22c55e);}
-        .hosp-card.no-beds::before{background:linear-gradient(90deg,#dc2626,#ef4444);}
-        .hosp-card.partial::before{background:linear-gradient(90deg,#d97706,#f59e0b);}
-        .hosp-card:hover{border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.07);transform:translateY(-4px);}
+        .hosp-card{
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 24px;
+            padding: 24px;
+            transition: all .3s cubic-bezier(.4,0,.2,1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 330px;
+        }
+        .hosp-card::before{
+            content:'';
+            position:absolute;
+            top:0;left:0;right:0;
+            height:4px;
+            border-radius:24px 24px 0 0;
+            transition: background .3s;
+        }
+        .hosp-card.has-beds::before{background:linear-gradient(90deg, #10b981, #059669);}
+        .hosp-card.no-beds::before{background:linear-gradient(90deg, #f43f5e, #be123c);}
+        .hosp-card.partial::before{background:linear-gradient(90deg, #f59e0b, #d97706);}
+        .hosp-card:hover{
+            border-color: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.04);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        }
 
-        .hosp-header{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px;}
-        .hosp-icon{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#1d4ed8,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;}
-        .hosp-name{font-weight:700;font-size:1rem;line-height:1.3;margin-bottom:4px;}
-        .hosp-loc{font-size:.8rem;color:rgba(255,255,255,.55);display:flex;align-items:center;gap:4px;}
-        .hosp-phone{font-size:.8rem;color:rgba(255,255,255,.55);margin-top:3px;}
+        .hosp-header{display:flex;align-items:flex-start;gap:14px;margin-bottom:20px;}
+        .hosp-icon{
+            width:46px;
+            height:46px;
+            border-radius:14px;
+            background:linear-gradient(135deg,var(--blue-dark),var(--blue));
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:1.3rem;
+            flex-shrink:0;
+            box-shadow: 0 4px 12px var(--blue-glow);
+        }
+        .hosp-name{font-weight:700;font-size:1.08rem;line-height:1.35;margin-bottom:5px;color:#fff;}
+        .hosp-loc{font-size:.82rem;color:rgba(255,255,255,.6);display:flex;align-items:center;gap:5px;}
+        .hosp-phone{
+            font-size:.8rem;
+            color:rgba(255,255,255,.5);
+            margin-top:5px;
+            display:flex;
+            align-items:center;
+            gap:5px;
+        }
+        .hosp-phone a {
+            color: var(--blue);
+            text-decoration: none;
+            transition: color .2s;
+            font-weight: 500;
+        }
+        .hosp-phone a:hover {
+            color: #60a5fa;
+            text-decoration: underline;
+        }
 
         /* BED SUMMARY */
-        .bed-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
-        .bed-item{background:rgba(255,255,255,.05);border-radius:12px;padding:12px 8px;text-align:center;border:1px solid rgba(255,255,255,.07);}
-        .bed-num{font-family:'Inter',sans-serif;font-size:1.6rem;font-weight:900;line-height:1;}
-        .bed-num.green{color:#4ade80;}
+        .bed-summary{
+            display:grid;
+            grid-template-columns:repeat(3,1fr);
+            gap:10px;
+            margin-bottom:18px;
+        }
+        .bed-item{
+            background:rgba(255,255,255,.03);
+            border-radius:16px;
+            padding:12px 6px;
+            text-align:center;
+            border:1px solid rgba(255,255,255,.05);
+            transition: border-color .2s;
+        }
+        .bed-item:hover {
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        .bed-num{font-family:'Outfit',sans-serif;font-size:1.7rem;font-weight:900;line-height:1;}
+        .bed-num.green{color:#34d399;}
         .bed-num.red{color:#f87171;}
         .bed-num.blue{color:#60a5fa;}
-        .bed-label{font-size:.72rem;color:rgba(255,255,255,.5);margin-top:4px;}
+        .bed-label{font-size:.7rem;color:rgba(255,255,255,.5);margin-top:5px;font-weight: 600;}
+        .bed-total-label{font-size:.65rem;color:rgba(255,255,255,.3);margin-top:2px;}
 
         /* STATUS BADGE */
-        .status-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:999px;font-size:.76rem;font-weight:700;}
-        .status-green{background:rgba(22,163,74,.2);color:#4ade80;border:1px solid rgba(22,163,74,.3);}
-        .status-red{background:rgba(220,38,38,.2);color:#f87171;border:1px solid rgba(220,38,38,.3);}
-        .status-amber{background:rgba(217,119,6,.2);color:#fbbf24;border:1px solid rgba(217,119,6,.3);}
+        .status-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:100px;font-size:.76rem;font-weight:700;}
+        .status-green{background:var(--green-dim);color:#34d399;border:1px solid rgba(16,185,129,.2);}
+        .status-red{background:var(--rose-dim);color:#f87171;border:1px solid rgba(244,63,94,.2);}
+        .status-amber{background:var(--amber-dim);color:#fbbf24;border:1px solid rgba(245,158,11,.2);}
 
-        .hosp-footer{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.06);}
-        .update-time{font-size:.75rem;color:rgba(255,255,255,.35);}
+        .hosp-footer{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            margin-top:auto;
+            padding-top:16px;
+            border-top:1px solid rgba(255,255,255,.05);
+        }
+        .update-time{font-size:.72rem;color:rgba(255,255,255,.35);display:flex;align-items:center;gap:4px;}
 
-        /* LOADING */
-        .loading-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px;max-width:1200px;margin:0 auto;padding:0 1.5rem;}
-        .skeleton{background:rgba(255,255,255,.04);border-radius:20px;height:220px;animation:shimmer 1.5s infinite;}
-        @keyframes shimmer{0%,100%{opacity:.5;}50%{opacity:1;}}
+        /* LOADING & SKELETON */
+        .skeleton{
+            background: linear-gradient(90deg, rgba(255,255,255,.02) 25%, rgba(255,255,255,.05) 50%, rgba(255,255,255,.02) 75%);
+            background-size: 200% 100%;
+            animation: loading-shimmer 1.5s infinite;
+            border-radius: 24px;
+            height: 330px;
+            border: 1px solid rgba(255,255,255,.04);
+        }
+        @keyframes loading-shimmer{
+            0%{background-position:200% 0;}
+            100%{background-position:-200% 0;}
+        }
 
-        /* EMPTY */
-        .empty-state{text-align:center;padding:60px 20px;color:rgba(255,255,255,.4);}
-        .empty-state .icon{font-size:3.5rem;margin-bottom:16px;}
-        .empty-state h3{font-size:1.2rem;margin-bottom:8px;color:rgba(255,255,255,.6);}
+        /* EMPTY STATE */
+        .empty-state{text-align:center;padding:80px 20px;color:rgba(255,255,255,.35);grid-column:1/-1;}
+        .empty-state .icon{font-size:3.5rem;margin-bottom:16px;opacity:.7;}
+        .empty-state h3{font-size:1.25rem;margin-bottom:8px;color:#fff;}
 
         /* FOOTER */
-        footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);padding:28px 1.5rem;text-align:center;color:rgba(255,255,255,.4);font-size:.85rem;}
-        footer a{color:var(--red);text-decoration:none;}
+        footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);padding:36px 1.5rem;text-align:center;color:rgba(255,255,255,.45);font-size:.85rem;background: rgba(0,0,0,0.2);}
+        footer a{color:var(--red);text-decoration:none;font-weight: 500;}
+        footer a:hover { text-decoration: underline; }
 
+        @media(max-width:992px){
+            .stats-grid-hero { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        }
         @media(max-width:768px){
             .hosp-grid{grid-template-columns:1fr;}
             .nav-links .nav-btn-ghost:not(:last-child){display:none;}
-            .bed-summary{grid-template-columns:repeat(3,1fr);}
+            .controls{padding: 16px; gap: 12px;}
+        }
+        @media(max-width:576px){
+            .stats-grid-hero { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -129,10 +372,10 @@
             <span class="logo-text">Life<span>Line</span></span>
         </a>
         <div class="nav-links">
-            <a href="/doctors.html" class="nav-btn nav-btn-ghost" style="color:#34d399;border-color:rgba(16,185,129,.3);">🩺 ডাক্তার সিরিয়াল</a>
-            <a href="/medical-centers.html" class="nav-btn nav-btn-active">🏥 Medical Centers</a>
-            <a href="/apply.html" class="nav-btn nav-btn-ghost">আবেদন করুন</a>
-            <a href="/login.html" id="loginBtn" class="nav-btn nav-btn-red">লগিন করুন</a>
+            <a href="/doctors" class="nav-btn nav-btn-ghost" style="color:#34d399;border-color:rgba(16,185,129,.35);">🩺 ডাক্তার সিরিয়াল</a>
+            <a href="/medical-centers" class="nav-btn nav-btn-active">🏥 Medical Centers</a>
+            <a href="/apply" class="nav-btn nav-btn-ghost">আবেদন করুন</a>
+            <a href="/login" id="loginBtn" class="nav-btn nav-btn-red">লগইন / রেজিস্টার</a>
         </div>
     </div>
 </nav>
@@ -143,24 +386,36 @@
         লাইভ বেড তথ্য আপডেট হচ্ছে
     </div>
     <h1>হাসপাতালের <span>লাইভ বেড স্ট্যাটাস</span></h1>
-    <p>ICU, ইমার্জেন্সি ও সাধারণ বেডের রিয়েল-টাইম তথ্য দেখুন এবং সঠিক হাসপাতাল বেছে নিন।</p>
+    <p>ICU, ইমার্জেন্সি ও সাধারণ বেডের রিয়েল-টাইম তথ্য দেখুন এবং সরাসরি যোগাযোগ করে দ্রুত সেবা নিশ্চিত করুন।</p>
 
-    <div class="stats-row">
-        <div class="stat-item">
-            <div class="stat-num" id="statTotal">—</div>
-            <div class="stat-label">মোট হাসপাতাল</div>
+    <div class="stats-grid-hero">
+        <div class="stat-box-hero">
+            <div class="stat-box-icon" style="background: rgba(255,255,255,.04); color: #fff;"><i class="fas fa-hospital"></i></div>
+            <div>
+                <div class="stat-num" id="statTotal">—</div>
+                <div class="stat-label">মোট হাসপাতাল</div>
+            </div>
         </div>
-        <div class="stat-item">
-            <div class="stat-num" id="statIcu" style="color:#4ade80">—</div>
-            <div class="stat-label">মোট ICU খালি</div>
+        <div class="stat-box-hero">
+            <div class="stat-box-icon" style="background: rgba(16,185,129,.1); color: #34d399;"><i class="fas fa-heartbeat"></i></div>
+            <div>
+                <div class="stat-num" id="statIcu" style="color:#34d399">—</div>
+                <div class="stat-label">মোট ICU খালি</div>
+            </div>
         </div>
-        <div class="stat-item">
-            <div class="stat-num" id="statEm" style="color:#f87171">—</div>
-            <div class="stat-label">মোট EM খালি</div>
+        <div class="stat-box-hero">
+            <div class="stat-box-icon" style="background: rgba(244,63,94,.1); color: #f87171;"><i class="fas fa-ambulance"></i></div>
+            <div>
+                <div class="stat-num" id="statEm" style="color:#f87171">—</div>
+                <div class="stat-label">মোট EM খালি</div>
+            </div>
         </div>
-        <div class="stat-item">
-            <div class="stat-num" id="statNormal" style="color:#60a5fa">—</div>
-            <div class="stat-label">মোট সাধারণ খালি</div>
+        <div class="stat-box-hero">
+            <div class="stat-box-icon" style="background: rgba(59,130,246,.1); color: #60a5fa;"><i class="fas fa-bed"></i></div>
+            <div>
+                <div class="stat-num" id="statNormal" style="color:#60a5fa">—</div>
+                <div class="stat-label">মোট সাধারণ খালি</div>
+            </div>
         </div>
     </div>
 </section>
@@ -178,21 +433,19 @@
         <option value="normal">সাধারণ বেড খালি</option>
         <option value="any">যেকোনো বেড খালি</option>
     </select>
-    <button class="refresh-btn" onclick="loadHospitals()">🔄 রিফ্রেশ</button>
+    <button class="refresh-btn" onclick="loadHospitals()"><i class="fas fa-sync-alt"></i> রিফ্রেশ</button>
 </div>
 
 <!-- Hospital Grid -->
 <div id="hospGrid" class="hosp-grid">
-    <div class="loading-grid" style="grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px;">
-        <div class="skeleton"></div>
-        <div class="skeleton"></div>
-        <div class="skeleton"></div>
-    </div>
+    <div class="skeleton"></div>
+    <div class="skeleton"></div>
+    <div class="skeleton"></div>
 </div>
 
 <footer>
     <p>© ২০২৬ <a href="/">LifeLine</a> — জরুরি রক্ত ও হাসপাতাল সেবা | বাংলাদেশ 🇧🇩</p>
-    <p style="margin-top:6px;font-size:.78rem;">তথ্য প্রতিটি হাসপাতাল সরাসরি আপডেট করে। সর্বশেষ আপডেটের সময় কার্ডে দেখা যাচ্ছে।</p>
+    <p style="margin-top:6px;font-size:.78rem;color:rgba(255,255,255,.3);">তথ্য প্রতিটি হাসপাতাল সরাসরি আপডেট করে। সর্বশেষ আপডেটের সময় কার্ডে দেখা যাচ্ছে।</p>
 </footer>
 
 <script src="/js/notify.js"></script>
@@ -201,27 +454,33 @@ let allHospitals = [];
 
 async function loadHospitals() {
     const grid = document.getElementById('hospGrid');
-    grid.innerHTML = `<div style="grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px;">
-        <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
-    </div>`;
+    grid.innerHTML = `
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+    `;
     try {
-        const res = await fetch('/api/hospitals');
+        const res = await fetch('/api/medical-centers');
         const data = await res.json();
         if(!data.success || !data.data.length) {
-            grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">
-                <div class="icon">🏥</div>
-                <h3>কোনো হাসপাতালের তথ্য নেই</h3>
-                <p>হাসপাতাল কর্তৃপক্ষ এখনো বেড তথ্য আপডেট করেনি।</p>
-            </div>`;
+            grid.innerHTML = `
+                <div class="empty-state">
+                    <div class="icon">🏥</div>
+                    <h3>কোনো হাসপাতালের তথ্য নেই</h3>
+                    <p>হাসপাতাল কর্তৃপক্ষ এখনো বেড তথ্য আপডেট করেনি।</p>
+                </div>`;
             return;
         }
         allHospitals = data.data;
         updateSummaryStats(data.data);
         renderHospitals(data.data);
     } catch(e) {
-        grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">
-            <div class="icon">⚠️</div><h3>লোড করা যায়নি</h3><p>সার্ভার সংযোগে সমস্যা হচ্ছে।</p>
-        </div>`;
+        grid.innerHTML = `
+            <div class="empty-state">
+                <div class="icon">⚠️</div>
+                <h3>লোড করা যায়নি</h3>
+                <p>সার্ভার সংযোগে সমস্যা হচ্ছে। কিছুক্ষণ পর আবার চেষ্টা করুন।</p>
+            </div>`;
     }
 }
 
@@ -236,7 +495,7 @@ function filterHospitals() {
     const q = document.getElementById('searchInput').value.toLowerCase();
     const f = document.getElementById('bedFilter').value;
     let filtered = allHospitals.filter(h => {
-        const matchText = !q || (h.name||'').toLowerCase().includes(q) || (h.location||'').toLowerCase().includes(q);
+        const matchText = !q || (h.name||'').toLowerCase().includes(q) || (h.location||'').toLowerCase().includes(q) || (h.address||'').toLowerCase().includes(q);
         let matchBed = true;
         if(f==='icu') matchBed = (h.icu_available||0) > 0;
         else if(f==='emergency') matchBed = (h.emergency_bed_available||0) > 0;
@@ -250,7 +509,12 @@ function filterHospitals() {
 function renderHospitals(list) {
     const grid = document.getElementById('hospGrid');
     if(!list.length){
-        grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1;"><div class="icon">🔍</div><h3>কোনো ফলাফল নেই</h3><p>অনুসন্ধান পরিবর্তন করে আবার চেষ্টা করুন।</p></div>`;
+        grid.innerHTML=`
+            <div class="empty-state">
+                <div class="icon">🔍</div>
+                <h3>কোনো ফলাফল নেই</h3>
+                <p>অনুসন্ধান পরিবর্তন করে আবার চেষ্টা করুন।</p>
+            </div>`;
         return;
     }
 
@@ -273,23 +537,23 @@ function renderHospitals(list) {
         let cardClass = 'no-beds', statusBadge = '';
         if(totalFree > 0 && totalFree >= (icuT+emT+nmT)*0.3){
             cardClass='has-beds';
-            statusBadge=`<span class="status-badge status-green">✅ বেড পাওয়া যাবে</span>`;
+            statusBadge=`<span class="status-badge status-green"><i class="fas fa-check-circle"></i> বেড পাওয়া যাবে</span>`;
         } else if(totalFree > 0){
             cardClass='partial';
-            statusBadge=`<span class="status-badge status-amber">⚠️ সীমিত বেড</span>`;
+            statusBadge=`<span class="status-badge status-amber"><i class="fas fa-exclamation-triangle"></i> সীমিত বেড</span>`;
         } else {
-            statusBadge=`<span class="status-badge status-red">❌ বেড নেই</span>`;
+            statusBadge=`<span class="status-badge status-red"><i class="fas fa-times-circle"></i> বেড খালি নেই</span>`;
         }
 
-        const phone = h.phone ? `<div class="hosp-phone">📞 <a href="tel:${h.phone}" style="color:rgba(255,255,255,.55);text-decoration:none;">${h.phone}</a></div>` : '';
+        const phone = h.phone ? `<div class="hosp-phone"><i class="fas fa-phone-alt"></i> <a href="tel:${h.phone}">${h.phone}</a></div>` : '';
 
         return `
         <div class="hosp-card ${cardClass}">
             <div class="hosp-header">
-                <div class="hosp-icon">🏥</div>
+                <div class="hosp-icon"><i class="fas fa-hospital-alt" style="color:#fff;"></i></div>
                 <div style="flex:1;min-width:0;">
                     <div class="hosp-name">${h.name}</div>
-                    <div class="hosp-loc">📍 ${h.location||'—'}</div>
+                    <div class="hosp-loc"><i class="fas fa-map-marker-alt"></i> ${h.location||'—'}</div>
                     ${phone}
                 </div>
             </div>
@@ -298,30 +562,30 @@ function renderHospitals(list) {
                 <div class="bed-item">
                     <div class="bed-num green">${icu}</div>
                     <div class="bed-label">ICU খালি</div>
-                    <div style="font-size:.68rem;color:rgba(255,255,255,.3);margin-top:2px;">/ ${icuT} মোট</div>
+                    <div class="bed-total-label">/ ${icuT} মোট</div>
                 </div>
                 <div class="bed-item">
                     <div class="bed-num red">${em}</div>
                     <div class="bed-label">EM খালি</div>
-                    <div style="font-size:.68rem;color:rgba(255,255,255,.3);margin-top:2px;">/ ${emT} মোট</div>
+                    <div class="bed-total-label">/ ${emT} মোট</div>
                 </div>
                 <div class="bed-item">
                     <div class="bed-num blue">${nm}</div>
                     <div class="bed-label">সাধারণ খালি</div>
-                    <div style="font-size:.68rem;color:rgba(255,255,255,.3);margin-top:2px;">/ ${nmT} মোট</div>
+                    <div class="bed-total-label">/ ${nmT} মোট</div>
                 </div>
             </div>
 
-            <!-- Visual bar -->
-            <div style="display:flex;gap:4px;margin-bottom:12px;">
-                ${buildBar(icu,icuT,'#4ade80','ICU')}
-                ${buildBar(em,emT,'#f87171','EM')}
-                ${buildBar(nm,nmT,'#60a5fa','সাধারণ')}
+            <!-- Visual bars -->
+            <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px;">
+                ${buildBar(icu,icuT,'#10b981','ICU')}
+                ${buildBar(em,emT,'#f43f5e','EM')}
+                ${buildBar(nm,nmT,'#3b82f6','সাধারণ')}
             </div>
 
             <div class="hosp-footer">
                 ${statusBadge}
-                <div class="update-time">🕐 লাইভ আপডেট</div>
+                <div class="update-time"><i class="far fa-clock"></i> লাইভ আপডেট</div>
             </div>
         </div>`;
     }).join('');
@@ -329,8 +593,13 @@ function renderHospitals(list) {
 
 function buildBar(free, total, color, label) {
     const pct = total > 0 ? Math.round((free/total)*100) : 0;
-    return `<div style="flex:1;background:rgba(255,255,255,.08);border-radius:6px;overflow:hidden;height:6px;" title="${label}: ${free}/${total} খালি">
-        <div style="height:100%;width:${pct}%;background:${color};border-radius:6px;transition:width .5s;"></div>
+    return `
+    <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:0.65rem;color:rgba(255,255,255,0.4);width:32px;text-align:left;font-weight:600;">${label}</span>
+        <div style="flex:1;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden;height:5px;" title="${label}: ${free}/${total} খালি">
+            <div style="height:100%;width:${pct}%;background:${color};border-radius:99px;transition:width .5s;"></div>
+        </div>
+        <span style="font-size:0.65rem;color:rgba(255,255,255,0.4);width:24px;text-align:right;">${pct}%</span>
     </div>`;
 }
 
@@ -341,9 +610,16 @@ loadHospitals();
 setInterval(loadHospitals, 60000);
 
 // Login button state
-if(localStorage.getItem('userRole') === 'hospital'){
+const userRole = localStorage.getItem('userRole');
+if(userRole === 'hospital'){
     const btn = document.getElementById('loginBtn');
-    if(btn){ btn.textContent='ড্যাশবোর্ড'; btn.href='/hospital-dashboard.html'; }
+    if(btn){ btn.textContent='ড্যাশবোর্ড'; btn.href='/hospital-panel'; }
+} else if(userRole === 'doctor'){
+    const btn = document.getElementById('loginBtn');
+    if(btn){ btn.textContent='ড্যাশবোর্ড'; btn.href='/dr-panel'; }
+} else if(userRole === 'donor'){
+    const btn = document.getElementById('loginBtn');
+    if(btn){ btn.textContent='ড্যাশবোর্ড'; btn.href='/donor-panel'; }
 }
 </script>
 </body>
