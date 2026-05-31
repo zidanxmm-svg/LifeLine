@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>হাসপাতাল ড্যাশবোর্ড - LifeLine</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -17,6 +18,7 @@
             --green: #16a34a; --green-light: #dcfce7;
             --amber: #d97706; --amber-light: #fef3c7;
             --purple: #7c3aed; --purple-light: #ede9fe;
+            --cyan: #0891b2; --cyan-light: #cffafe;
             --dark: #0f172a; --gray: #64748b; --border: #e2e8f0;
             --bg: #f1f5f9; --surface: #ffffff;
         }
@@ -35,18 +37,20 @@
         .logo-icon { width: 38px; height: 38px; background: linear-gradient(135deg,#2563eb,#1d4ed8); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
         .logo-text { font-family: 'Inter',sans-serif; font-weight: 800; font-size: 1.1rem; color: #fff; }
         .logo-sub { font-size: .72rem; color: rgba(255,255,255,.45); margin-top: 1px; }
-        .nav-section { padding: 16px 12px 8px; }
+
+        .nav-section { padding: 12px 12px 4px; }
         .nav-label { font-size: .68rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.3); padding: 0 8px; margin-bottom: 6px; }
         .nav-item {
             display: flex; align-items: center; gap: 10px; padding: 10px 12px;
             border-radius: 10px; cursor: pointer; transition: all .2s;
-            color: rgba(255,255,255,.6); font-size: .9rem; font-weight: 500;
+            color: rgba(255,255,255,.6); font-size: .88rem; font-weight: 500;
             margin-bottom: 2px; border: none; background: none; width: 100%; text-align: left;
         }
         .nav-item:hover { background: rgba(255,255,255,.07); color: #fff; }
         .nav-item.active { background: rgba(37,99,235,.25); color: #93c5fd; }
-        .nav-item .nav-icon { font-size: 1.05rem; width: 22px; text-align: center; }
+        .nav-icon { font-size: 1.05rem; width: 22px; text-align: center; }
         .nav-badge { margin-left: auto; background: var(--red); color: #fff; font-size: .68rem; font-weight: 700; padding: 2px 7px; border-radius: 999px; }
+
         .sidebar-footer { margin-top: auto; padding: 12px; border-top: 1px solid rgba(255,255,255,.07); }
         .hospital-info { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; background: rgba(255,255,255,.05); }
         .hosp-avatar { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg,#2563eb,#7c3aed); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
@@ -55,7 +59,7 @@
         .logout-btn { display: flex; align-items: center; gap: 8px; width: 100%; padding: 9px 12px; border-radius: 10px; background: rgba(220,38,38,.12); border: 1px solid rgba(220,38,38,.25); color: #f87171; font-size: .85rem; font-weight: 600; cursor: pointer; transition: all .2s; margin-top: 8px; }
         .logout-btn:hover { background: rgba(220,38,38,.22); }
 
-        /* ── MAIN CONTENT ── */
+        /* ── MAIN ── */
         .main { margin-left: 260px; flex: 1; min-height: 100vh; display: flex; flex-direction: column; }
         .topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 40; }
         .page-title { font-family: 'Inter',sans-serif; font-size: 1.1rem; font-weight: 700; }
@@ -75,7 +79,7 @@
         .card-title { font-size: 1rem; font-weight: 700; }
         .card-body { padding: 20px; }
 
-        /* ── STAT CARDS ── */
+        /* ── STATS ── */
         .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 20px; }
         .stat-card { background: var(--surface); border-radius: 14px; padding: 20px; border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(15,23,42,.05); display: flex; align-items: center; gap: 14px; transition: transform .2s; }
         .stat-card:hover { transform: translateY(-2px); }
@@ -127,8 +131,9 @@
         .badge-amber { background: var(--amber-light); color: var(--amber); }
         .badge-blue { background: var(--blue-light); color: var(--blue); }
         .badge-purple { background: var(--purple-light); color: var(--purple); }
+        .badge-cyan { background: var(--cyan-light); color: var(--cyan); }
 
-        /* ── BLOOD GROUP BUTTONS ── */
+        /* ── BLOOD BUTTONS ── */
         .blood-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
         .blood-btn { padding: 10px 4px; border: 2px solid var(--border); border-radius: 10px; background: #fafbfc; font-size: .95rem; font-weight: 700; cursor: pointer; transition: all .2s; font-family: inherit; text-align: center; }
         .blood-btn:hover { border-color: var(--red); color: var(--red); background: var(--red-light); }
@@ -144,12 +149,20 @@
         .modal-body { padding: 24px; }
         .modal-close { width: 32px; height: 32px; border-radius: 50%; background: var(--bg); border: none; cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; color: var(--gray); }
 
-        /* ── SECTION HEADERS ── */
+        /* ── SECTION HEADER ── */
         .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
         .section-title { font-size: 1.15rem; font-weight: 700; }
 
-        /* ── BED DISPLAY ── */
-        .bed-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+        /* ── DOCTOR CARD ── */
+        .doctor-card { background: var(--surface); border-radius: 14px; border: 1px solid var(--border); padding: 18px; transition: all .2s; cursor: pointer; }
+        .doctor-card:hover { border-color: var(--blue); box-shadow: 0 4px 16px rgba(37,99,235,.1); }
+        .doctor-avatar { width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg,var(--blue),var(--purple)); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: #fff; font-weight: 700; flex-shrink: 0; }
+        .doctor-stats { display: flex; gap: 14px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #f1f5f9; }
+        .d-stat { text-align: center; flex: 1; }
+        .d-stat-num { font-family: 'Inter',sans-serif; font-size: 1.2rem; font-weight: 800; }
+        .d-stat-label { font-size: .7rem; color: var(--gray); }
+
+        /* ── BED CARDS ── */
         .bed-card { background: var(--surface); border-radius: 14px; padding: 20px; border: 2px solid var(--border); text-align: center; transition: all .2s; }
         .bed-card:hover { border-color: var(--blue); }
         .bed-count { font-family: 'Inter',sans-serif; font-size: 2.5rem; font-weight: 900; line-height: 1; }
@@ -158,27 +171,11 @@
         .bed-total { color: var(--blue); }
         .bed-type { font-size: .85rem; font-weight: 600; color: var(--gray); margin-top: 6px; }
 
-        /* ── DOCTOR CARD ── */
-        .doctor-card { background: var(--surface); border-radius: 14px; border: 1px solid var(--border); padding: 18px; transition: all .2s; cursor: pointer; }
-        .doctor-card:hover { border-color: var(--blue); box-shadow: 0 4px 16px rgba(37,99,235,.1); }
-        .doctor-avatar { width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg,var(--blue),var(--purple)); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: #fff; font-weight: 700; flex-shrink: 0; }
-        .doctor-name { font-weight: 700; font-size: .95rem; }
-        .doctor-spec { font-size: .8rem; color: var(--gray); }
-        .doctor-stats { display: flex; gap: 14px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #f1f5f9; }
-        .d-stat { text-align: center; flex: 1; }
-        .d-stat-num { font-family: 'Inter',sans-serif; font-size: 1.2rem; font-weight: 800; }
-        .d-stat-label { font-size: .7rem; color: var(--gray); }
-
         /* ── BLOOD REQUEST TRACKER ── */
-        .request-tracker { background: linear-gradient(135deg,#1e1b4b,var(--blue)); border-radius: 14px; padding: 20px; color: #fff; margin-bottom: 16px; }
-        .tracker-title { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
-        .tracker-sub { font-size: .82rem; opacity: .75; }
-        .tracker-progress { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
-        .tracker-step { display: flex; align-items: center; gap: 6px; font-size: .8rem; padding: 6px 12px; border-radius: 8px; background: rgba(255,255,255,.12); font-weight: 600; }
-        .tracker-step.done { background: rgba(74,222,128,.2); color: #4ade80; }
-        .tracker-step.active { background: rgba(251,191,36,.2); color: #fbbf24; }
+        .req-card { background: #f8fafc; border-radius: 12px; padding: 16px; margin-bottom: 12px; border: 1.5px solid var(--border); }
+        .req-card:hover { border-color: var(--red); }
 
-        /* ── TOGGLE SWITCH ── */
+        /* ── TOGGLE ── */
         .toggle { position: relative; display: inline-block; width: 44px; height: 24px; }
         .toggle input { opacity: 0; width: 0; height: 0; }
         .toggle-slider { position: absolute; cursor: pointer; inset: 0; background: #cbd5e1; border-radius: 24px; transition: .3s; }
@@ -197,30 +194,28 @@
         #settingsMap { width: 100%; height: 260px; border-radius: 12px; }
         .mapboxgl-ctrl-logo, .mapboxgl-ctrl-attrib { display: none !important; }
 
+        /* ── TAB ROW ── */
+        .tab-row { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+        .tab-btn { padding: 8px 18px; border-radius: 999px; border: 1.5px solid var(--border); background: #fff; font-weight: 600; font-size: .85rem; cursor: pointer; transition: all .2s; color: var(--gray); }
+        .tab-btn.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+
+        /* ── API KEY BOX ── */
+        .api-key-box { background: #0f172a; border-radius: 12px; padding: 14px 16px; font-family: monospace; font-size: .82rem; color: #93c5fd; display: flex; align-items: center; justify-content: space-between; gap: 12px; word-break: break-all; }
+
         /* ── EMPTY STATE ── */
         .empty-state { text-align: center; padding: 40px 20px; color: var(--gray); }
         .empty-icon { font-size: 3rem; margin-bottom: 12px; }
 
         /* ── RESPONSIVE ── */
-        @media (max-width: 1024px) {
-            .stats-grid { grid-template-columns: repeat(2,1fr); }
-            .bed-grid { grid-template-columns: repeat(2,1fr); }
-        }
+        @media (max-width: 1200px) { .stats-grid { grid-template-columns: repeat(2,1fr); } }
         @media (max-width: 768px) {
             .sidebar { transform: translateX(-100%); }
             .sidebar.open { transform: translateX(0); }
             .main { margin-left: 0; }
             .form-grid-2, .form-grid-3 { grid-template-columns: 1fr; }
             .stats-grid { grid-template-columns: 1fr 1fr; }
+            .content { padding: 16px; }
         }
-
-        /* Tab buttons for appointment filter */
-        .tab-row { display: flex; gap: 8px; margin-bottom: 18px; }
-        .tab-btn { padding: 8px 18px; border-radius: 999px; border: 1.5px solid var(--border); background: #fff; font-weight: 600; font-size: .85rem; cursor: pointer; transition: all .2s; color: var(--gray); }
-        .tab-btn.active { background: var(--blue); color: #fff; border-color: var(--blue); }
-
-        /* API key box */
-        .api-key-box { background: #0f172a; border-radius: 12px; padding: 14px 16px; font-family: monospace; font-size: .82rem; color: #93c5fd; display: flex; align-items: center; justify-content: space-between; gap: 12px; word-break: break-all; }
     </style>
 </head>
 <body>
@@ -255,7 +250,7 @@
         </button>
     </div>
 
-    <div class="nav-section" style="margin-top:auto; padding-bottom:0;">
+    <div class="nav-section">
         <div class="nav-label">System</div>
         <button class="nav-item" data-page="settings">
             <span class="nav-icon">⚙️</span> Settings
@@ -271,7 +266,7 @@
             </div>
         </div>
         <button class="logout-btn" onclick="logout()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
             লগআউট
         </button>
     </div>
@@ -279,7 +274,6 @@
 
 <!-- ══ MAIN ══ -->
 <div class="main">
-    <!-- Topbar -->
     <header class="topbar">
         <div>
             <div class="page-title" id="topbarTitle">ড্যাশবোর্ড ওভারভিউ</div>
@@ -293,41 +287,28 @@
 
     <div class="content">
 
-        <!-- ══ DASHBOARD PAGE ══ -->
+        <!-- ══ DASHBOARD ══ -->
         <div class="page active" id="page-dashboard">
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-icon" style="background:#eff6ff">📅</div>
-                    <div>
-                        <div class="stat-num" style="color:var(--blue)" id="statTotalAppts">0</div>
-                        <div class="stat-label">মোট অ্যাপয়েন্টমেন্ট</div>
-                    </div>
+                    <div><div class="stat-num" style="color:var(--blue)" id="statTotalAppts">0</div><div class="stat-label">মোট অ্যাপয়েন্টমেন্ট</div></div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon" style="background:#dcfce7">✅</div>
-                    <div>
-                        <div class="stat-num" style="color:var(--green)" id="statCompletedAppts">0</div>
-                        <div class="stat-label">সম্পন্ন আজ</div>
-                    </div>
+                    <div><div class="stat-num" style="color:var(--green)" id="statCompletedAppts">0</div><div class="stat-label">সম্পন্ন আজ</div></div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon" style="background:#fee2e2">🩸</div>
-                    <div>
-                        <div class="stat-num" style="color:var(--red)" id="statBloodReqs">0</div>
-                        <div class="stat-label">রক্তের অনুরোধ</div>
-                    </div>
+                    <div><div class="stat-num" style="color:var(--red)" id="statBloodReqs">0</div><div class="stat-label">রক্তের অনুরোধ</div></div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon" style="background:#fef3c7">🛏️</div>
-                    <div>
-                        <div class="stat-num" style="color:var(--amber)" id="statFreeBeds">0</div>
-                        <div class="stat-label">খালি বেড</div>
-                    </div>
+                    <div><div class="stat-num" style="color:var(--amber)" id="statFreeBeds">0</div><div class="stat-label">খালি বেড</div></div>
                 </div>
             </div>
 
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-                <!-- Today Appointments -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
                 <div class="card">
                     <div class="card-header">
                         <div class="card-title">আজকের অ্যাপয়েন্টমেন্ট</div>
@@ -336,37 +317,27 @@
                     <div class="table-wrap">
                         <table>
                             <thead><tr><th>রোগী</th><th>সময়</th><th>ডাক্তার</th><th>স্ট্যাটাস</th></tr></thead>
-                            <tbody id="dashApptList"><tr><td colspan="4" class="empty-state" style="padding:20px;text-align:center;color:var(--gray);">লোড হচ্ছে...</td></tr></tbody>
+                            <tbody id="dashApptList"><tr><td colspan="4" style="padding:20px;text-align:center;color:var(--gray)">লোড হচ্ছে...</td></tr></tbody>
                         </table>
                     </div>
                 </div>
-                <!-- Bed Summary -->
                 <div class="card">
                     <div class="card-header">
                         <div class="card-title">বেড স্ট্যাটাস</div>
                         <button class="btn btn-outline btn-sm" onclick="switchPage('beds')">আপডেট করুন</button>
                     </div>
                     <div class="card-body">
-                        <div class="bed-grid" style="grid-template-columns:repeat(3,1fr);">
-                            <div class="bed-card">
-                                <div class="bed-count bed-available" id="dashIcuFree">—</div>
-                                <div class="bed-type">ICU খালি</div>
-                            </div>
-                            <div class="bed-card">
-                                <div class="bed-count bed-available" id="dashEmFree">—</div>
-                                <div class="bed-type">ইমার্জেন্সি খালি</div>
-                            </div>
-                            <div class="bed-card">
-                                <div class="bed-count bed-available" id="dashNormalFree">—</div>
-                                <div class="bed-type">সাধারণ খালি</div>
-                            </div>
+                        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+                            <div class="bed-card"><div class="bed-count bed-available" id="dashIcuFree">—</div><div class="bed-type">ICU খালি</div></div>
+                            <div class="bed-card"><div class="bed-count bed-available" id="dashEmFree">—</div><div class="bed-type">EM খালি</div></div>
+                            <div class="bed-card"><div class="bed-count bed-available" id="dashNormalFree">—</div><div class="bed-type">সাধারণ খালি</div></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ══ APPOINTMENT PAGE ══ -->
+        <!-- ══ APPOINTMENT ══ -->
         <div class="page" id="page-appointments">
             <div class="section-header">
                 <div>
@@ -391,36 +362,35 @@
                 <div class="table-wrap">
                     <table>
                         <thead><tr><th>সিরিয়াল</th><th>রোগীর নাম</th><th>বয়স/লিঙ্গ</th><th>ডাক্তার</th><th>সময়</th><th>ধরন</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead>
-                        <tbody id="apptTableBody"><tr><td colspan="8" style="padding:30px;text-align:center;color:var(--gray);">তারিখ নির্বাচন করুন</td></tr></tbody>
+                        <tbody id="apptTableBody"><tr><td colspan="8" style="padding:30px;text-align:center;color:var(--gray)">তারিখ নির্বাচন করুন</td></tr></tbody>
                     </table>
                 </div>
             </div>
         </div>
 
-        <!-- ══ DOCTOR MANAGEMENT PAGE ══ -->
+        <!-- ══ DR. MANAGEMENT ══ -->
         <div class="page" id="page-doctors">
             <div class="section-header">
                 <div>
                     <div class="section-title">Dr. Management</div>
-                    <p style="font-size:.85rem;color:var(--gray);margin-top:3px;">এই মেডিকেলের ডাক্তারদের তথ্য ও অ্যাপয়েন্টমেন্ট পরিচালনা</p>
+                    <p style="font-size:.85rem;color:var(--gray);margin-top:3px;">ডাক্তারদের তথ্য, স্লট ও অ্যাপয়েন্টমেন্ট পরিচালনা</p>
                 </div>
                 <button class="btn btn-primary" onclick="openModal('addDoctorModal')">+ নতুন ডাক্তার যোগ</button>
             </div>
-            <div id="doctorCardGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;">
-                <div class="empty-state"><div class="empty-icon">👨‍⚕️</div><p>ডাক্তার লোড হচ্ছে...</p></div>
+            <div id="doctorCardGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px;">
+                <div class="empty-state"><div class="empty-icon">👨‍⚕️</div><p>লোড হচ্ছে...</p></div>
             </div>
         </div>
 
-        <!-- ══ BLOOD REQUEST PAGE ══ -->
+        <!-- ══ NEED BLOOD ══ -->
         <div class="page" id="page-blood">
             <div class="section-header">
-                <div class="section-title">রক্তের অনুরোধ</div>
+                <div class="section-title">🩸 রক্তের অনুরোধ</div>
             </div>
-
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
-                <!-- New Request Form -->
+                <!-- Form -->
                 <div class="card">
-                    <div class="card-header"><div class="card-title">🩸 নতুন রক্তের অনুরোধ</div></div>
+                    <div class="card-header"><div class="card-title">নতুন রক্তের অনুরোধ</div></div>
                     <div class="card-body">
                         <form id="bloodRequestForm">
                             <div class="form-group" style="margin-bottom:14px;">
@@ -448,7 +418,7 @@
                                 </div>
                             </div>
                             <div class="form-group" style="margin-bottom:14px;">
-                                <label class="form-label">রোগীর ধরন / কারণ</label>
+                                <label class="form-label">রোগীর সমস্যা / কারণ</label>
                                 <input type="text" id="bloodPatientDisease" class="form-input" placeholder="যেমন: সিজার, দুর্ঘটনা" required>
                             </div>
                             <div class="form-group" style="margin-bottom:16px;">
@@ -461,66 +431,49 @@
                 </div>
 
                 <!-- Active Requests -->
-                <div>
-                    <div class="card">
-                        <div class="card-header"><div class="card-title">সক্রিয় অনুরোধসমূহ</div><button class="btn btn-outline btn-sm" onclick="loadBloodRequests()">🔄</button></div>
-                        <div id="bloodRequestList" style="padding:16px;">
-                            <div class="empty-state"><div class="empty-icon">🩸</div><p>কোনো সক্রিয় অনুরোধ নেই</p></div>
-                        </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">সক্রিয় অনুরোধসমূহ</div>
+                        <button class="btn btn-outline btn-sm" onclick="loadBloodRequests()">🔄 রিফ্রেশ</button>
+                    </div>
+                    <div id="bloodRequestList" style="padding:16px;max-height:520px;overflow-y:auto;">
+                        <div class="empty-state"><div class="empty-icon">🩸</div><p>কোনো সক্রিয় অনুরোধ নেই</p></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ══ BED MANAGEMENT PAGE ══ -->
+        <!-- ══ ICU & BED ══ -->
         <div class="page" id="page-beds">
             <div class="section-header">
                 <div class="section-title">ICU & Bed ম্যানেজমেন্ট</div>
                 <button class="btn btn-primary" onclick="saveBedData()">💾 পরিবর্তন সেভ করুন</button>
             </div>
-
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+                <!-- Input -->
                 <div class="card">
                     <div class="card-header"><div class="card-title">বেড তথ্য আপডেট</div></div>
                     <div class="card-body">
-                        <div class="form-grid" style="gap:16px;">
+                        <div style="display:flex;flex-direction:column;gap:16px;">
                             <div style="padding:14px;background:#eff6ff;border-radius:12px;border:2px solid var(--blue)">
                                 <div style="font-weight:700;color:var(--blue);margin-bottom:10px;">🏥 ICU বেড</div>
                                 <div class="form-grid form-grid-2">
-                                    <div class="form-group">
-                                        <label class="form-label">মোট ICU</label>
-                                        <input type="number" id="icuTotal" class="form-input" min="0" value="0">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">খালি ICU</label>
-                                        <input type="number" id="icuAvailable" class="form-input" min="0" value="0">
-                                    </div>
+                                    <div class="form-group"><label class="form-label">মোট ICU</label><input type="number" id="icuTotal" class="form-input" min="0" value="0" oninput="updateBedLiveView()"></div>
+                                    <div class="form-group"><label class="form-label">খালি ICU</label><input type="number" id="icuAvailable" class="form-input" min="0" value="0" oninput="updateBedLiveView()"></div>
                                 </div>
                             </div>
                             <div style="padding:14px;background:#fee2e2;border-radius:12px;border:2px solid var(--red)">
                                 <div style="font-weight:700;color:var(--red);margin-bottom:10px;">🚨 ইমার্জেন্সি বেড</div>
                                 <div class="form-grid form-grid-2">
-                                    <div class="form-group">
-                                        <label class="form-label">মোট ইমার্জেন্সি</label>
-                                        <input type="number" id="emTotal" class="form-input" min="0" value="0">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">খালি ইমার্জেন্সি</label>
-                                        <input type="number" id="emAvailable" class="form-input" min="0" value="0">
-                                    </div>
+                                    <div class="form-group"><label class="form-label">মোট ইমার্জেন্সি</label><input type="number" id="emTotal" class="form-input" min="0" value="0" oninput="updateBedLiveView()"></div>
+                                    <div class="form-group"><label class="form-label">খালি ইমার্জেন্সি</label><input type="number" id="emAvailable" class="form-input" min="0" value="0" oninput="updateBedLiveView()"></div>
                                 </div>
                             </div>
                             <div style="padding:14px;background:#dcfce7;border-radius:12px;border:2px solid var(--green)">
                                 <div style="font-weight:700;color:var(--green);margin-bottom:10px;">🛏️ সাধারণ বেড</div>
                                 <div class="form-grid form-grid-2">
-                                    <div class="form-group">
-                                        <label class="form-label">মোট সাধারণ</label>
-                                        <input type="number" id="normalTotal" class="form-input" min="0" value="0">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">খালি সাধারণ</label>
-                                        <input type="number" id="normalAvailable" class="form-input" min="0" value="0">
-                                    </div>
+                                    <div class="form-group"><label class="form-label">মোট সাধারণ</label><input type="number" id="normalTotal" class="form-input" min="0" value="0" oninput="updateBedLiveView()"></div>
+                                    <div class="form-group"><label class="form-label">খালি সাধারণ</label><input type="number" id="normalAvailable" class="form-input" min="0" value="0" oninput="updateBedLiveView()"></div>
                                 </div>
                             </div>
                         </div>
@@ -529,9 +482,9 @@
 
                 <!-- Live Preview -->
                 <div class="card">
-                    <div class="card-header"><div class="card-title">লাইভ বেড ভিউ (পাবলিক দেখতে পাবে)</div></div>
+                    <div class="card-header"><div class="card-title">লাইভ বেড ভিউ (পাবলিক দেখবে)</div></div>
                     <div class="card-body">
-                        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;" id="bedLiveView">
+                        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
                             <div class="bed-card"><div class="bed-count bed-available" id="lv-icuFree">0</div><div class="bed-type">ICU খালি</div></div>
                             <div class="bed-card"><div class="bed-count bed-occupied" id="lv-icuOcc">0</div><div class="bed-type">ICU ভর্তি</div></div>
                             <div class="bed-card"><div class="bed-count bed-total" id="lv-icuTotal">0</div><div class="bed-type">ICU মোট</div></div>
@@ -542,23 +495,22 @@
                             <div class="bed-card"><div class="bed-count bed-occupied" id="lv-nOcc">0</div><div class="bed-type">সাধারণ ভর্তি</div></div>
                             <div class="bed-card"><div class="bed-count bed-total" id="lv-nTotal">0</div><div class="bed-type">সাধারণ মোট</div></div>
                         </div>
-                        <p style="font-size:.78rem;color:var(--gray);margin-top:12px;text-align:center;">⚡ সেভ করলে সাথে সাথে Medical Centers পেজে আপডেট হবে</p>
+                        <p style="font-size:.78rem;color:var(--gray);margin-top:14px;text-align:center;">⚡ সেভ করলে সাথে সাথে Medical Centers পেজে আপডেট হবে</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ══ SETTINGS PAGE ══ -->
+        <!-- ══ SETTINGS ══ -->
         <div class="page" id="page-settings">
             <div class="section-title" style="margin-bottom:20px;">সেটিংস ও প্রোফাইল</div>
-
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
-                <!-- Profile & Location -->
+                <!-- Profile + Map -->
                 <div class="card">
                     <div class="card-header"><div class="card-title">প্রোফাইল ও লোকেশন</div></div>
                     <div class="card-body">
                         <form id="settingsProfileForm">
-                            <div class="form-grid" style="gap:14px;">
+                            <div style="display:flex;flex-direction:column;gap:14px;">
                                 <div class="form-grid form-grid-2">
                                     <div class="form-group">
                                         <label class="form-label">ফোন নম্বর</label>
@@ -570,7 +522,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">ম্যাপ থেকে লোকেশন</label>
+                                    <label class="form-label">ম্যাপ থেকে লোকেশন সেট করুন</label>
                                     <div style="position:relative;border-radius:12px;overflow:hidden;border:1.5px solid var(--border);">
                                         <div id="settingsMap"></div>
                                         <button type="button" id="myLocBtn" style="position:absolute;bottom:10px;left:10px;z-index:10;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;border:none;padding:7px 14px;border-radius:8px;font-weight:700;font-size:.8rem;cursor:pointer;">📍 আমার অবস্থান</button>
@@ -583,9 +535,9 @@
                     </div>
                 </div>
 
-                <!-- API & Info -->
-                <div>
-                    <div class="card" style="margin-bottom:16px;">
+                <!-- Info + API -->
+                <div style="display:flex;flex-direction:column;gap:16px;">
+                    <div class="card">
                         <div class="card-header"><div class="card-title">হাসপাতালের তথ্য</div></div>
                         <div class="card-body" id="hospInfoDisplay" style="display:grid;gap:10px;font-size:.88rem;"></div>
                     </div>
@@ -595,11 +547,18 @@
                             <button class="btn btn-outline btn-sm" onclick="regenerateApiKey()">🔄 নতুন Key</button>
                         </div>
                         <div class="card-body">
-                            <div class="api-key-box" id="apiKeyBox">
-                                <span id="apiKeyText">—</span>
-                                <button onclick="copyApiKey()" style="background:var(--blue);color:#fff;border:none;padding:5px 12px;border-radius:8px;font-size:.78rem;font-weight:700;cursor:pointer;">কপি</button>
+                            <div class="api-key-box">
+                                <span id="apiKeyText" style="word-break:break-all;">—</span>
+                                <button onclick="copyApiKey()" style="background:var(--blue);color:#fff;border:none;padding:5px 12px;border-radius:8px;font-size:.78rem;font-weight:700;cursor:pointer;white-space:nowrap;">কপি</button>
                             </div>
                             <p style="font-size:.78rem;color:var(--gray);margin-top:10px;">Endpoint: <code style="background:#f1f5f9;padding:2px 6px;border-radius:4px;">/api/v1/hospital/update-beds</code></p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><div class="card-title">🌐 পাবলিক লিংক</div></div>
+                        <div class="card-body" style="display:flex;flex-direction:column;gap:10px;">
+                            <a href="/medical-centers.html" target="_blank" class="btn btn-outline" style="justify-content:center;">🏥 Medical Centers পেজ দেখুন</a>
+                            <p style="font-size:.78rem;color:var(--gray);">এই পেজে আপনার হাসপাতালের বেড তথ্য পাবলিকলি দেখা যাবে।</p>
                         </div>
                     </div>
                 </div>
@@ -611,7 +570,7 @@
 
 <!-- ══ MODALS ══ -->
 
-<!-- Add Offline Appointment Modal -->
+<!-- Offline Appointment -->
 <div class="modal-overlay" id="addOfflineApptModal">
     <div class="modal-box" style="max-width:520px;">
         <div class="modal-header">
@@ -621,18 +580,9 @@
         <div class="modal-body">
             <form id="offlineApptForm" onsubmit="submitOfflineAppt(event)">
                 <div class="form-grid form-grid-2" style="gap:14px;">
-                    <div class="form-group">
-                        <label class="form-label">রোগীর নাম *</label>
-                        <input type="text" id="oa_name" class="form-input" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">ফোন নম্বর *</label>
-                        <input type="tel" id="oa_phone" class="form-input" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">বয়স *</label>
-                        <input type="number" id="oa_age" class="form-input" min="0" max="150" required>
-                    </div>
+                    <div class="form-group"><label class="form-label">রোগীর নাম *</label><input type="text" id="oa_name" class="form-input" required></div>
+                    <div class="form-group"><label class="form-label">ফোন নম্বর *</label><input type="tel" id="oa_phone" class="form-input" required></div>
+                    <div class="form-group"><label class="form-label">বয়স *</label><input type="number" id="oa_age" class="form-input" min="0" max="150" required></div>
                     <div class="form-group">
                         <label class="form-label">লিঙ্গ *</label>
                         <select id="oa_gender" class="form-select" required>
@@ -644,30 +594,20 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">ডাক্তার</label>
-                        <select id="oa_doctor" class="form-select">
-                            <option value="">ডাক্তার নির্বাচন</option>
-                        </select>
+                        <select id="oa_doctor" class="form-select"><option value="">ডাক্তার নির্বাচন</option></select>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">তারিখ</label>
-                        <input type="date" id="oa_date" class="form-input">
-                    </div>
-                    <div class="form-group" style="grid-column:span 2;">
-                        <label class="form-label">সমস্যা</label>
-                        <textarea id="oa_problem" class="form-textarea" rows="2"></textarea>
-                    </div>
-                    <div class="form-group" style="grid-column:span 2;">
-                        <button type="submit" class="btn btn-primary btn-full">যোগ করুন</button>
-                    </div>
+                    <div class="form-group"><label class="form-label">তারিখ</label><input type="date" id="oa_date" class="form-input"></div>
+                    <div class="form-group" style="grid-column:span 2;"><label class="form-label">সমস্যা</label><textarea id="oa_problem" class="form-textarea" rows="2"></textarea></div>
+                    <div class="form-group" style="grid-column:span 2;"><button type="submit" class="btn btn-primary btn-full">যোগ করুন</button></div>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<!-- Add Doctor Modal -->
+<!-- Add Doctor -->
 <div class="modal-overlay" id="addDoctorModal">
-    <div class="modal-box" style="max-width:520px;">
+    <div class="modal-box" style="max-width:540px;">
         <div class="modal-header">
             <div class="modal-title">নতুন ডাক্তার যোগ করুন</div>
             <button class="modal-close" onclick="closeModal('addDoctorModal')">✕</button>
@@ -675,61 +615,32 @@
         <div class="modal-body">
             <form id="addDoctorForm" onsubmit="submitAddDoctor(event)">
                 <div class="form-grid form-grid-2" style="gap:14px;">
-                    <div class="form-group">
-                        <label class="form-label">ডাক্তারের নাম *</label>
-                        <input type="text" id="nd_name" class="form-input" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">বিশেষজ্ঞতা *</label>
-                        <input type="text" id="nd_spec" class="form-input" placeholder="যেমন: Cardiology" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">পদবি</label>
-                        <input type="text" id="nd_desig" class="form-input" placeholder="Professor / Consultant">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">ফোন *</label>
-                        <input type="tel" id="nd_phone" class="form-input" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">ভিজিট ফি (৳)</label>
-                        <input type="number" id="nd_fee" class="form-input" value="500" min="0">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">অভিজ্ঞতা (বছর)</label>
-                        <input type="number" id="nd_exp" class="form-input" min="0">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">বসার দিন</label>
-                        <input type="text" id="nd_days" class="form-input" placeholder="Sat, Mon, Wed">
-                    </div>
+                    <div class="form-group"><label class="form-label">ডাক্তারের নাম *</label><input type="text" id="nd_name" class="form-input" required></div>
+                    <div class="form-group"><label class="form-label">বিশেষজ্ঞতা *</label><input type="text" id="nd_spec" class="form-input" placeholder="Cardiology" required></div>
+                    <div class="form-group"><label class="form-label">পদবি</label><input type="text" id="nd_desig" class="form-input" placeholder="Professor / Consultant"></div>
+                    <div class="form-group"><label class="form-label">ফোন *</label><input type="tel" id="nd_phone" class="form-input" required></div>
+                    <div class="form-group"><label class="form-label">ভিজিট ফি (৳)</label><input type="number" id="nd_fee" class="form-input" value="500" min="0"></div>
+                    <div class="form-group"><label class="form-label">অভিজ্ঞতা (বছর)</label><input type="number" id="nd_exp" class="form-input" min="0"></div>
+                    <div class="form-group"><label class="form-label">বসার দিন</label><input type="text" id="nd_days" class="form-input" placeholder="Sat, Mon, Wed"></div>
                     <div class="form-group">
                         <label class="form-label" style="display:flex;align-items:center;gap:8px;">
                             স্লট সীমা চালু করুন
                             <label class="toggle"><input type="checkbox" id="nd_slotToggle" onchange="toggleSlotInput()"><span class="toggle-slider"></span></label>
                         </label>
-                        <input type="number" id="nd_maxSlot" class="form-input" placeholder="সর্বোচ্চ রোগী সংখ্যা" style="display:none;margin-top:6px;">
+                        <input type="number" id="nd_maxSlot" class="form-input" placeholder="সর্বোচ্চ রোগী সংখ্যা" style="display:none;margin-top:6px;" min="1">
                     </div>
-                    <div class="form-group" style="grid-column:span 2;">
-                        <label class="form-label">লগইন ইউজারনেম *</label>
-                        <input type="text" id="nd_username" class="form-input" required>
-                    </div>
-                    <div class="form-group" style="grid-column:span 2;">
-                        <label class="form-label">পাসওয়ার্ড *</label>
-                        <input type="password" id="nd_password" class="form-input" required>
-                    </div>
-                    <div style="grid-column:span 2;">
-                        <button type="submit" class="btn btn-primary btn-full">ডাক্তার যোগ করুন</button>
-                    </div>
+                    <div class="form-group" style="grid-column:span 2;"><label class="form-label">লগইন ইউজারনেম *</label><input type="text" id="nd_username" class="form-input" required></div>
+                    <div class="form-group" style="grid-column:span 2;"><label class="form-label">পাসওয়ার্ড *</label><input type="password" id="nd_password" class="form-input" required></div>
+                    <div style="grid-column:span 2;"><button type="submit" class="btn btn-primary btn-full">ডাক্তার যোগ করুন</button></div>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<!-- Doctor Detail Modal -->
+<!-- Doctor Detail -->
 <div class="modal-overlay" id="doctorDetailModal">
-    <div class="modal-box" style="max-width:580px;">
+    <div class="modal-box" style="max-width:600px;">
         <div class="modal-header">
             <div class="modal-title" id="docDetailTitle">ডাক্তারের বিস্তারিত</div>
             <button class="modal-close" onclick="closeModal('doctorDetailModal')">✕</button>
@@ -738,15 +649,15 @@
             <div id="docDetailContent"></div>
             <div style="margin-top:16px;">
                 <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-                    <label class="form-label" style="margin:0;white-space:nowrap;">তারিখ দেখুন:</label>
+                    <label class="form-label" style="margin:0;white-space:nowrap;">তারিখ ফিল্টার:</label>
                     <input type="date" id="docDetailDate" class="form-input" style="max-width:180px;" onchange="loadDocDetailStats()">
                 </div>
                 <div id="docDetailStats" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px;"></div>
             </div>
             <div style="margin-top:16px;">
-                <div class="form-label" style="margin-bottom:8px;">আজকের অ্যাপয়েন্টমেন্ট</div>
+                <div class="form-label" style="margin-bottom:8px;">অ্যাপয়েন্টমেন্ট লিস্ট</div>
                 <div class="table-wrap" style="max-height:220px;overflow-y:auto;">
-                    <table><thead><tr><th>সিরিয়াল</th><th>রোগী</th><th>সময়</th><th>স্ট্যাটাস</th></tr></thead>
+                    <table><thead><tr><th>সিরিয়াল</th><th>রোগী</th><th>সময়</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead>
                     <tbody id="docDetailAppts"></tbody></table>
                 </div>
             </div>
@@ -758,16 +669,14 @@
 <script src="/js/bd-districts.js"></script>
 <script src="/js/mapbox-utils.js"></script>
 <script>
-// ══════════════════════════════════════════════
-//  AUTH & INIT
-// ══════════════════════════════════════════════
+// ══ AUTH ══
 let userData = JSON.parse(localStorage.getItem('userData') || '{}');
 if (localStorage.getItem('userRole') !== 'hospital' || !userData.id) {
     window.location.href = '/login.html';
 }
-
 document.getElementById('sidebarHospName').textContent = userData.name || 'হাসপাতাল';
 
+// ══ STATE ══
 let settingsMap = null, settingsMarker = null;
 let settingsLocation = { latitude: parseFloat(userData.latitude)||23.8103, longitude: parseFloat(userData.longitude)||90.4125, address: userData.address||'' };
 let currentBloodGroup = 'A+';
@@ -775,28 +684,23 @@ let activeApptTab = 'All';
 let allAppts = [];
 let activeDoctorId = null;
 
-// Today's date as default
+// Defaults
 document.getElementById('apptDateFilter').value = new Date().toISOString().split('T')[0];
 document.getElementById('docDetailDate').value = new Date().toISOString().split('T')[0];
 if(document.getElementById('oa_date')) document.getElementById('oa_date').value = new Date().toISOString().split('T')[0];
 
-// ══════════════════════════════════════════════
-//  NAVIGATION
-// ══════════════════════════════════════════════
+// ══ NAV ══
 const pageTitles = {
-    dashboard: ['ড্যাশবোর্ড ওভারভিউ','আজকের সারসংক্ষেপ'],
-    appointments: ['Appointment ম্যানেজমেন্ট','সকল সিরিয়াল ও রোগীর রেকর্ড'],
-    doctors: ['Dr. Management','ডাক্তারদের তথ্য ও পরিচালনা'],
-    blood: ['রক্তের অনুরোধ','ব্লাড ডোনার খুঁজুন'],
-    beds: ['ICU & Bed ম্যানেজমেন্ট','লাইভ বেড তথ্য আপডেট'],
-    settings: ['সেটিংস ও প্রোফাইল','হাসপাতালের তথ্য পরিচালনা'],
+    dashboard:    ['ড্যাশবোর্ড ওভারভিউ',        'আজকের সারসংক্ষেপ'],
+    appointments: ['Appointment ম্যানেজমেন্ট',    'সকল সিরিয়াল ও রোগীর রেকর্ড'],
+    doctors:      ['Dr. Management',               'ডাক্তারদের তথ্য ও পরিচালনা'],
+    blood:        ['রক্তের অনুরোধ',               'ব্লাড ডোনার খুঁজুন'],
+    beds:         ['ICU & Bed ম্যানেজমেন্ট',      'লাইভ বেড তথ্য আপডেট'],
+    settings:     ['সেটিংস ও প্রোফাইল',           'হাসপাতালের তথ্য পরিচালনা'],
 };
 
 document.querySelectorAll('.nav-item').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const page = btn.dataset.page;
-        switchPage(page);
-    });
+    btn.addEventListener('click', () => switchPage(btn.dataset.page));
 });
 
 function switchPage(page) {
@@ -807,35 +711,27 @@ function switchPage(page) {
     const t = pageTitles[page] || ['',''];
     document.getElementById('topbarTitle').textContent = t[0];
     document.getElementById('topbarSub').textContent = t[1];
-    if(page === 'settings') initSettingsMap();
-    if(page === 'doctors') loadDoctors();
+    if(page === 'settings')     initSettingsMap();
+    if(page === 'doctors')      loadDoctors();
     if(page === 'appointments') loadAppointments();
-    if(page === 'blood') loadBloodRequests();
-    if(page === 'beds') loadBedData();
-    if(page === 'dashboard') loadDashboard();
+    if(page === 'blood')        loadBloodRequests();
+    if(page === 'beds')         loadBedData();
+    if(page === 'dashboard')    loadDashboard();
 }
 
-function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('open');
-}
-
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
 function logout() { localStorage.clear(); window.location.href = '/login.html'; }
 
-// ══════════════════════════════════════════════
-//  MODALS
-// ══════════════════════════════════════════════
+// ══ MODALS ══
 function openModal(id) { document.getElementById(id).classList.add('show'); }
 function closeModal(id) { document.getElementById(id).classList.remove('show'); }
 document.querySelectorAll('.modal-overlay').forEach(m => {
     m.addEventListener('click', e => { if(e.target === m) m.classList.remove('show'); });
 });
 
-// ══════════════════════════════════════════════
-//  DASHBOARD
-// ══════════════════════════════════════════════
+// ══ DASHBOARD ══
 async function loadDashboard() {
     try {
-        // Load today's appointments
         const today = new Date().toISOString().split('T')[0];
         const res = await fetch('/api/hospital/appointments-by-date', {
             method:'POST', headers:{'Content-Type':'application/json'},
@@ -848,49 +744,42 @@ async function loadDashboard() {
             document.getElementById('statCompletedAppts').textContent = appts.filter(a=>a.status==='Completed').length;
             document.getElementById('pendingBadge').textContent = appts.filter(a=>a.status==='Confirmed'||!a.status).length;
             const tbody = document.getElementById('dashApptList');
-            if(appts.length === 0) { tbody.innerHTML = '<tr><td colspan="4" style="padding:20px;text-align:center;color:var(--gray)">আজ কোনো অ্যাপয়েন্টমেন্ট নেই</td></tr>'; }
-            else {
-                tbody.innerHTML = appts.slice(0,5).map(a => `
-                    <tr>
-                        <td>${a.patient_name||'—'}</td>
-                        <td>${formatTime(a.appointment_time)}</td>
-                        <td>${a.doctor_name||'—'}</td>
-                        <td><span class="badge ${a.status==='Completed'?'badge-green':a.status==='Cancelled'?'badge-red':'badge-amber'}">${a.status==='Completed'?'সম্পন্ন':a.status==='Cancelled'?'বাতিল':'অপেক্ষমান'}</span></td>
-                    </tr>`).join('');
+            tbody.innerHTML = appts.length ? appts.slice(0,5).map(a=>`
+                <tr>
+                    <td>${a.patient_name||'—'}</td>
+                    <td>${formatTime(a.appointment_time)}</td>
+                    <td>${a.doctor_name||'—'}</td>
+                    <td><span class="badge ${a.status==='Completed'?'badge-green':a.status==='Cancelled'?'badge-red':'badge-amber'}">${a.status==='Completed'?'সম্পন্ন':a.status==='Cancelled'?'বাতিল':'অপেক্ষমান'}</span></td>
+                </tr>`).join('')
+                : '<tr><td colspan="4" style="padding:20px;text-align:center;color:var(--gray)">আজ কোনো অ্যাপয়েন্টমেন্ট নেই</td></tr>';
+        }
+    } catch(e){}
+
+    try {
+        const res = await fetch('/api/hospitals');
+        const data = await res.json();
+        if(data.success){
+            const hosp = (data.data||[]).find(h=>h.id===userData.id);
+            if(hosp){
+                document.getElementById('dashIcuFree').textContent = hosp.icu_available??0;
+                document.getElementById('dashEmFree').textContent = hosp.emergency_bed_available??0;
+                document.getElementById('dashNormalFree').textContent = hosp.normal_bed_available??0;
+                document.getElementById('statFreeBeds').textContent = (hosp.icu_available||0)+(hosp.emergency_bed_available||0)+(hosp.normal_bed_available||0);
             }
         }
-    } catch(e) {}
+    } catch(e){}
 
-    // Bed data
     try {
-        const bedRes = await fetch('/api/hospitals');
-        const bedData = await bedRes.json();
-        if(bedData.success) {
-            const hosp = bedData.data.find(h=>h.id===userData.id);
-            if(hosp) {
-                document.getElementById('dashIcuFree').textContent = hosp.icu_available ?? 0;
-                document.getElementById('dashEmFree').textContent = hosp.emergency_bed_available ?? 0;
-                document.getElementById('dashNormalFree').textContent = hosp.normal_bed_available ?? 0;
-                const free = (hosp.icu_available||0)+(hosp.emergency_bed_available||0)+(hosp.normal_bed_available||0);
-                document.getElementById('statFreeBeds').textContent = free;
-            }
-        }
-    } catch(e) {}
-
-    // Blood requests count
-    try {
-        const blRes = await fetch('/api/hospital/blood-requests', {
+        const res = await fetch('/api/hospital/blood-requests', {
             method:'POST', headers:{'Content-Type':'application/json'},
             body: JSON.stringify({ hospitalId: userData.id })
         });
-        const blData = await blRes.json();
-        if(blData.success) document.getElementById('statBloodReqs').textContent = blData.data.filter(r=>r.status==='Pending').length;
-    } catch(e) {}
+        const data = await res.json();
+        if(data.success) document.getElementById('statBloodReqs').textContent = (data.data||[]).filter(r=>r.status==='Pending').length;
+    } catch(e){}
 }
 
-// ══════════════════════════════════════════════
-//  APPOINTMENTS
-// ══════════════════════════════════════════════
+// ══ APPOINTMENTS ══
 async function loadAppointments() {
     const date = document.getElementById('apptDateFilter').value;
     const tbody = document.getElementById('apptTableBody');
@@ -901,11 +790,11 @@ async function loadAppointments() {
             body: JSON.stringify({ hospitalId: userData.id, date })
         });
         const data = await res.json();
-        if(!data.success) { tbody.innerHTML = '<tr><td colspan="8" style="padding:20px;text-align:center;">ডেটা লোড করা যায়নি</td></tr>'; return; }
-        allAppts = data.data || [];
+        if(!data.success){ tbody.innerHTML='<tr><td colspan="8" style="padding:20px;text-align:center;">লোড ব্যর্থ</td></tr>'; return; }
+        allAppts = data.data||[];
         renderApptTable();
-    } catch(e) {
-        tbody.innerHTML = '<tr><td colspan="8" style="padding:20px;text-align:center;color:red;">সার্ভার এরর</td></tr>';
+    } catch(e){
+        tbody.innerHTML='<tr><td colspan="8" style="padding:20px;text-align:center;color:red;">সার্ভার এরর</td></tr>';
     }
 }
 
@@ -917,13 +806,13 @@ function filterApptTab(btn, status) {
 }
 
 function renderApptTable() {
-    const filtered = activeApptTab === 'All' ? allAppts : allAppts.filter(a => {
-        if(activeApptTab === 'Confirmed') return a.status === 'Confirmed' || !a.status;
-        return a.status === activeApptTab;
+    const filtered = activeApptTab==='All' ? allAppts : allAppts.filter(a => {
+        if(activeApptTab==='Confirmed') return a.status==='Confirmed'||!a.status;
+        return a.status===activeApptTab;
     });
     const tbody = document.getElementById('apptTableBody');
-    if(!filtered.length) { tbody.innerHTML = '<tr><td colspan="8" style="padding:30px;text-align:center;color:var(--gray)">কোনো রেকর্ড নেই</td></tr>'; return; }
-    tbody.innerHTML = filtered.map(a => `
+    if(!filtered.length){ tbody.innerHTML='<tr><td colspan="8" style="padding:30px;text-align:center;color:var(--gray)">কোনো রেকর্ড নেই</td></tr>'; return; }
+    tbody.innerHTML = filtered.map(a=>`
         <tr>
             <td><strong>#${a.serial_number||'—'}</strong></td>
             <td>${a.patient_name||'—'}<br><span style="font-size:.75rem;color:var(--gray)">${a.patient_phone||''}</span></td>
@@ -946,9 +835,9 @@ async function updateApptStatus(id, status) {
             body: JSON.stringify({ appointmentId: id, status, hospitalId: userData.id })
         });
         const data = await res.json();
-        if(data.success) { showToast('স্ট্যাটাস আপডেট হয়েছে','success'); loadAppointments(); }
+        if(data.success){ showToast('স্ট্যাটাস আপডেট হয়েছে','success'); loadAppointments(); }
         else showToast(data.message,'error');
-    } catch(e) { showToast('সার্ভার এরর','error'); }
+    } catch(e){ showToast('সার্ভার এরর','error'); }
 }
 
 async function submitOfflineAppt(e) {
@@ -969,14 +858,12 @@ async function submitOfflineAppt(e) {
             method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
         });
         const data = await res.json();
-        if(data.success) { closeModal('addOfflineApptModal'); showToast('রোগী যোগ হয়েছে','success'); loadAppointments(); document.getElementById('offlineApptForm').reset(); }
+        if(data.success){ closeModal('addOfflineApptModal'); showToast('রোগী যোগ হয়েছে','success'); loadAppointments(); document.getElementById('offlineApptForm').reset(); }
         else showToast(data.message,'error');
-    } catch(e) { showToast('সার্ভার এরর','error'); }
+    } catch(e){ showToast('সার্ভার এরর','error'); }
 }
 
-// ══════════════════════════════════════════════
-//  DOCTOR MANAGEMENT
-// ══════════════════════════════════════════════
+// ══ DOCTORS ══
 async function loadDoctors() {
     try {
         const res = await fetch('/api/hospital/doctors', {
@@ -985,30 +872,31 @@ async function loadDoctors() {
         });
         const data = await res.json();
         const grid = document.getElementById('doctorCardGrid');
-        if(!data.success||!data.data.length) { grid.innerHTML = '<div class="empty-state"><div class="empty-icon">👨‍⚕️</div><p>কোনো ডাক্তার যোগ করা হয়নি</p></div>'; return; }
-        grid.innerHTML = data.data.map(d => `
+        if(!data.success||!data.data.length){ grid.innerHTML='<div class="empty-state"><div class="empty-icon">👨‍⚕️</div><p>কোনো ডাক্তার যোগ করা হয়নি</p></div>'; return; }
+        grid.innerHTML = data.data.map(d=>`
             <div class="doctor-card" onclick="openDoctorDetail(${d.id})">
                 <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:8px;">
                     <div class="doctor-avatar">${d.name.charAt(0)}</div>
                     <div style="flex:1;min-width:0;">
-                        <div class="doctor-name">${d.name}</div>
-                        <div class="doctor-spec">${d.specialties}</div>
+                        <div style="font-weight:700;font-size:.95rem;">${d.name}</div>
+                        <div style="font-size:.8rem;color:var(--gray);">${d.specialties}</div>
                         <div style="font-size:.75rem;color:var(--gray);margin-top:2px;">${d.designation||''}</div>
                     </div>
                     <span class="badge ${d.status==='Active'?'badge-green':'badge-red'}">${d.status==='Active'?'Active':'Inactive'}</span>
                 </div>
-                <div style="font-size:.8rem;color:var(--gray);margin-bottom:8px;">📱 ${d.phone} &nbsp; ৳${d.fee}</div>
+                <div style="font-size:.8rem;color:var(--gray);margin-bottom:4px;">📱 ${d.phone} &nbsp; ৳${d.fee}</div>
+                ${d.max_patients?`<div style="font-size:.78rem;color:var(--blue);margin-bottom:4px;">🎯 স্লট সীমা: ${d.max_patients} জন</div>`:''}
                 <div class="doctor-stats">
-                    <div class="d-stat"><div class="d-stat-num" style="color:var(--blue)">${d.total_appts||0}</div><div class="d-stat-label">মোট</div></div>
+                    <div class="d-stat"><div class="d-stat-num" style="color:var(--blue)">${d.total_appts||0}</div><div class="d-stat-label">মোট বুকিং</div></div>
                     <div class="d-stat"><div class="d-stat-num" style="color:var(--green)">${d.completed_appts||0}</div><div class="d-stat-label">সম্পন্ন</div></div>
                     <div class="d-stat"><div class="d-stat-num" style="color:var(--amber)">${d.pending_appts||0}</div><div class="d-stat-label">পেন্ডিং</div></div>
                 </div>
             </div>`).join('');
 
-        // Also populate doctor dropdown in offline appt
+        // Doctor dropdown for offline appt
         const sel = document.getElementById('oa_doctor');
         sel.innerHTML = '<option value="">ডাক্তার নির্বাচন</option>' + data.data.map(d=>`<option value="${d.id}">${d.name} (${d.specialties})</option>`).join('');
-    } catch(e) {}
+    } catch(e){}
 }
 
 async function openDoctorDetail(docId) {
@@ -1020,7 +908,7 @@ async function openDoctorDetail(docId) {
             body: JSON.stringify({ doctorId: docId, hospitalId: userData.id })
         });
         const data = await res.json();
-        if(data.success) {
+        if(data.success){
             const d = data.data;
             document.getElementById('docDetailTitle').textContent = d.name;
             document.getElementById('docDetailContent').innerHTML = `
@@ -1029,12 +917,13 @@ async function openDoctorDetail(docId) {
                     <div>
                         <div style="font-weight:700;font-size:1.05rem;">${d.name}</div>
                         <div style="color:var(--gray);font-size:.85rem;">${d.specialties} • ${d.designation||''}</div>
-                        <div style="font-size:.82rem;margin-top:4px;">📱 ${d.phone} &nbsp; ৳${d.fee} &nbsp; ${d.experience_years||'—'} বছর অভিজ্ঞতা</div>
+                        <div style="font-size:.82rem;margin-top:4px;">📱 ${d.phone} &nbsp; ৳${d.fee} &nbsp; ${d.visiting_days||''}</div>
+                        ${d.max_patients?`<div style="font-size:.8rem;color:var(--blue);margin-top:2px;">🎯 সর্বোচ্চ স্লট: ${d.max_patients} জন</div>`:''}
                     </div>
                 </div>`;
             loadDocDetailStats();
         }
-    } catch(e) {}
+    } catch(e){}
 }
 
 async function loadDocDetailStats() {
@@ -1046,7 +935,7 @@ async function loadDocDetailStats() {
             body: JSON.stringify({ hospitalId: userData.id, date, doctorId: activeDoctorId })
         });
         const data = await res.json();
-        const appts = data.data || [];
+        const appts = data.data||[];
         document.getElementById('docDetailStats').innerHTML = `
             <div class="stat-card" style="flex-direction:column;text-align:center;padding:14px;">
                 <div class="stat-num" style="color:var(--blue);font-size:1.6rem;">${appts.length}</div>
@@ -1067,14 +956,14 @@ async function loadDocDetailStats() {
                 <td>${a.patient_name||'—'}</td>
                 <td>${formatTime(a.appointment_time)}</td>
                 <td><span class="badge ${a.status==='Completed'?'badge-green':a.status==='Cancelled'?'badge-red':'badge-amber'}">${a.status==='Completed'?'সম্পন্ন':a.status==='Cancelled'?'বাতিল':'পেন্ডিং'}</span></td>
+                <td>${a.status!=='Completed'&&a.status!=='Cancelled'?`<button class="btn btn-success btn-sm" onclick="updateApptStatus(${a.id},'Completed');loadDocDetailStats();">✅</button>`:''}</td>
             </tr>`).join('')
-            : '<tr><td colspan="4" style="padding:16px;text-align:center;color:var(--gray)">এই তারিখে কোনো অ্যাপয়েন্টমেন্ট নেই</td></tr>';
-    } catch(e) {}
+            : '<tr><td colspan="5" style="padding:16px;text-align:center;color:var(--gray)">এই তারিখে কোনো অ্যাপয়েন্টমেন্ট নেই</td></tr>';
+    } catch(e){}
 }
 
 function toggleSlotInput() {
-    const chk = document.getElementById('nd_slotToggle');
-    document.getElementById('nd_maxSlot').style.display = chk.checked ? 'block' : 'none';
+    document.getElementById('nd_maxSlot').style.display = document.getElementById('nd_slotToggle').checked ? 'block' : 'none';
 }
 
 async function submitAddDoctor(e) {
@@ -1091,21 +980,19 @@ async function submitAddDoctor(e) {
         max_patients: document.getElementById('nd_slotToggle').checked ? document.getElementById('nd_maxSlot').value : null,
         username: document.getElementById('nd_username').value,
         password: document.getElementById('nd_password').value,
-        district: userData.location?.split(',').pop()?.trim() || 'Dhaka'
+        district: userData.location?.split(',').pop()?.trim()||'Dhaka'
     };
     try {
         const res = await fetch('/api/hospital/add-doctor', {
             method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
         });
         const data = await res.json();
-        if(data.success) { closeModal('addDoctorModal'); showToast('ডাক্তার যোগ হয়েছে','success'); loadDoctors(); document.getElementById('addDoctorForm').reset(); }
+        if(data.success){ closeModal('addDoctorModal'); showToast('ডাক্তার যোগ হয়েছে','success'); loadDoctors(); document.getElementById('addDoctorForm').reset(); }
         else showToast(data.message,'error');
-    } catch(e) { showToast('সার্ভার এরর','error'); }
+    } catch(e){ showToast('সার্ভার এরর','error'); }
 }
 
-// ══════════════════════════════════════════════
-//  BLOOD REQUESTS
-// ══════════════════════════════════════════════
+// ══ BLOOD REQUESTS ══
 document.querySelectorAll('#bloodBtns .blood-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         document.querySelectorAll('#bloodBtns .blood-btn').forEach(b=>b.classList.remove('selected'));
@@ -1119,73 +1006,86 @@ document.getElementById('bloodRequestForm').addEventListener('submit', async e =
     e.preventDefault();
     const payload = {
         bloodGroup: currentBloodGroup,
-        bags: document.getElementById('bloodBags').value,
+        bags: parseInt(document.getElementById('bloodBags').value)||1,
         neededTime: document.getElementById('bloodNeededTime').value,
         patientDisease: document.getElementById('bloodPatientDisease').value,
         contactNumber: document.getElementById('bloodContact').value,
         hospitalId: userData.id,
         hospitalName: userData.name,
         location: userData.location,
-        district: userData.location?.split(',').pop()?.trim() || '',
+        district: userData.location?.split(',').pop()?.trim()||'',
         latitude: userData.latitude,
         longitude: userData.longitude
     };
     const btn = e.target.querySelector('button[type="submit"]');
-    btn.textContent = 'পাঠানো হচ্ছে...'; btn.disabled = true;
+    btn.textContent='পাঠানো হচ্ছে...'; btn.disabled=true;
     try {
         const res = await fetch('/api/hospital/send-blood-request', {
             method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
         });
         const data = await res.json();
-        if(data.success) { showToast('রক্তের অনুরোধ পাঠানো হয়েছে!','success'); e.target.reset(); document.querySelectorAll('#bloodBtns .blood-btn').forEach(b=>b.classList.remove('selected')); document.querySelector('#bloodBtns .blood-btn[data-group="A+"]').classList.add('selected'); currentBloodGroup='A+'; loadBloodRequests(); }
-        else showToast(data.message,'error');
-    } catch(err) { showToast('সার্ভার এরর','error'); }
-    finally { btn.textContent = '🚨 রক্তের অনুরোধ পাঠান'; btn.disabled = false; }
+        if(data.success){
+            showToast('রক্তের অনুরোধ পাঠানো হয়েছে!','success');
+            e.target.reset();
+            document.querySelectorAll('#bloodBtns .blood-btn').forEach(b=>b.classList.remove('selected'));
+            document.querySelector('#bloodBtns .blood-btn[data-group="A+"]').classList.add('selected');
+            currentBloodGroup='A+';
+            loadBloodRequests();
+        } else showToast(data.message,'error');
+    } catch(err){ showToast('সার্ভার এরর','error'); }
+    finally { btn.textContent='🚨 রক্তের অনুরোধ পাঠান'; btn.disabled=false; }
 });
 
 async function loadBloodRequests() {
     const container = document.getElementById('bloodRequestList');
-    container.innerHTML = '<div class="empty-state"><div class="empty-icon">⏳</div><p>লোড হচ্ছে...</p></div>';
+    container.innerHTML='<div class="empty-state"><div class="empty-icon">⏳</div><p>লোড হচ্ছে...</p></div>';
     try {
         const res = await fetch('/api/hospital/blood-requests', {
             method:'POST', headers:{'Content-Type':'application/json'},
             body: JSON.stringify({ hospitalId: userData.id })
         });
         const data = await res.json();
-        if(!data.success||!data.data.length) { container.innerHTML = '<div class="empty-state"><div class="empty-icon">🩸</div><p>কোনো অনুরোধ নেই</p></div>'; return; }
+        if(!data.success||!data.data.length){ container.innerHTML='<div class="empty-state"><div class="empty-icon">🩸</div><p>কোনো অনুরোধ নেই</p></div>'; return; }
         container.innerHTML = data.data.map(r => {
-            const acceptedDonors = r.accepted_donors || [];
-            const acceptedCount = acceptedDonors.length;
-            const bags = r.bags || 1;
+            const donors = r.accepted_donors||[];
+            const got = donors.length;
+            const need = r.bags||1;
+            const pct = Math.min(100, Math.round((got/need)*100));
             return `
-            <div style="background:#f8fafc;border-radius:12px;padding:14px;margin-bottom:12px;border:1.5px solid var(--border);">
+            <div class="req-card">
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
                     <div>
                         <span style="font-weight:800;font-size:1.1rem;color:var(--red)">🩸 ${r.blood_group}</span>
-                        <span style="margin-left:8px;font-size:.82rem;color:var(--gray)">${r.bags||1} ব্যাগ দরকার</span>
+                        <span style="margin-left:8px;font-size:.82rem;color:var(--gray)">${need} ব্যাগ দরকার</span>
                     </div>
                     <span class="badge ${r.status==='Completed'?'badge-green':r.status==='Pending'?'badge-amber':'badge-red'}">${r.status==='Completed'?'সম্পন্ন':r.status==='Pending'?'সক্রিয়':'বাতিল'}</span>
                 </div>
-                <div style="font-size:.82rem;color:var(--gray);margin-bottom:6px;">⏰ ${r.needed_time||'—'} &nbsp; 📋 ${r.patient_disease||'—'}</div>
-                <div style="font-size:.82rem;background:${acceptedCount>0?'#dcfce7':'#fef3c7'};border-radius:8px;padding:8px 10px;margin-bottom:8px;">
-                    <strong>${acceptedCount}/${bags} ব্যাগের ডোনার পাওয়া গেছে</strong>
-                    ${acceptedDonors.map(d=>`<div style="margin-top:4px;">✅ ${d.name} — <a href="tel:${d.phone}" style="color:var(--green);font-weight:700;">📞 ${d.phone}</a></div>`).join('')}
+                <div style="font-size:.82rem;color:var(--gray);margin-bottom:8px;">⏰ ${r.needed_time||'—'} &nbsp; 📋 ${r.patient_disease||'—'}</div>
+                <!-- Progress -->
+                <div style="background:#f1f5f9;border-radius:999px;height:8px;margin-bottom:8px;overflow:hidden;">
+                    <div style="height:100%;width:${pct}%;background:${pct>=100?'var(--green)':'var(--amber)'};border-radius:999px;transition:width .5s;"></div>
                 </div>
-                ${r.tracking_url?`<a href="${r.tracking_url}" target="_blank" style="font-size:.78rem;color:var(--blue);font-weight:600;">🔗 ট্র্যাকিং দেখুন</a>`:''}
+                <div style="font-size:.82rem;font-weight:700;color:${got>=need?'var(--green)':'var(--amber)'};margin-bottom:6px;">
+                    ${got}/${need} ব্যাগের ডোনার পাওয়া গেছে
+                </div>
+                ${donors.map(d=>`
+                    <div style="display:flex;align-items:center;justify-content:space-between;background:#dcfce7;border-radius:8px;padding:7px 10px;margin-bottom:4px;">
+                        <span style="font-size:.82rem;">✅ ${d.name}</span>
+                        <a href="tel:${d.phone}" style="font-weight:700;color:var(--green);font-size:.82rem;text-decoration:none;">📞 ${d.phone}</a>
+                    </div>`).join('')}
+                ${r.tracking_url?`<a href="${r.tracking_url}" target="_blank" style="font-size:.78rem;color:var(--blue);font-weight:600;margin-top:4px;display:inline-block;">🔗 ট্র্যাকিং দেখুন</a>`:''}
             </div>`; }).join('');
-    } catch(e) { container.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><p>লোড করা যায়নি</p></div>'; }
+    } catch(e){ container.innerHTML='<div class="empty-state"><div class="empty-icon">⚠️</div><p>লোড করা যায়নি</p></div>'; }
 }
 
-// ══════════════════════════════════════════════
-//  BED MANAGEMENT
-// ══════════════════════════════════════════════
+// ══ BED MANAGEMENT ══
 async function loadBedData() {
     try {
         const res = await fetch('/api/hospitals');
         const data = await res.json();
-        if(data.success) {
-            const h = data.data.find(x=>x.id===userData.id);
-            if(h) {
+        if(data.success){
+            const h = (data.data||[]).find(x=>x.id===userData.id);
+            if(h){
                 document.getElementById('icuAvailable').value = h.icu_available||0;
                 document.getElementById('emAvailable').value = h.emergency_bed_available||0;
                 document.getElementById('normalAvailable').value = h.normal_bed_available||0;
@@ -1195,30 +1095,26 @@ async function loadBedData() {
                 updateBedLiveView();
             }
         }
-    } catch(e) {}
+    } catch(e){}
 }
 
 function updateBedLiveView() {
-    const icuT = parseInt(document.getElementById('icuTotal').value)||0;
-    const icuF = parseInt(document.getElementById('icuAvailable').value)||0;
-    const emT = parseInt(document.getElementById('emTotal').value)||0;
-    const emF = parseInt(document.getElementById('emAvailable').value)||0;
-    const nT = parseInt(document.getElementById('normalTotal').value)||0;
-    const nF = parseInt(document.getElementById('normalAvailable').value)||0;
-    document.getElementById('lv-icuFree').textContent = icuF;
-    document.getElementById('lv-icuOcc').textContent = Math.max(0,icuT-icuF);
-    document.getElementById('lv-icuTotal').textContent = icuT;
-    document.getElementById('lv-emFree').textContent = emF;
-    document.getElementById('lv-emOcc').textContent = Math.max(0,emT-emF);
-    document.getElementById('lv-emTotal').textContent = emT;
-    document.getElementById('lv-nFree').textContent = nF;
-    document.getElementById('lv-nOcc').textContent = Math.max(0,nT-nF);
-    document.getElementById('lv-nTotal').textContent = nT;
+    const icuT=parseInt(document.getElementById('icuTotal').value)||0;
+    const icuF=parseInt(document.getElementById('icuAvailable').value)||0;
+    const emT=parseInt(document.getElementById('emTotal').value)||0;
+    const emF=parseInt(document.getElementById('emAvailable').value)||0;
+    const nT=parseInt(document.getElementById('normalTotal').value)||0;
+    const nF=parseInt(document.getElementById('normalAvailable').value)||0;
+    document.getElementById('lv-icuFree').textContent=icuF;
+    document.getElementById('lv-icuOcc').textContent=Math.max(0,icuT-icuF);
+    document.getElementById('lv-icuTotal').textContent=icuT;
+    document.getElementById('lv-emFree').textContent=emF;
+    document.getElementById('lv-emOcc').textContent=Math.max(0,emT-emF);
+    document.getElementById('lv-emTotal').textContent=emT;
+    document.getElementById('lv-nFree').textContent=nF;
+    document.getElementById('lv-nOcc').textContent=Math.max(0,nT-nF);
+    document.getElementById('lv-nTotal').textContent=nT;
 }
-
-['icuTotal','icuAvailable','emTotal','emAvailable','normalTotal','normalAvailable'].forEach(id => {
-    document.getElementById(id).addEventListener('input', updateBedLiveView);
-});
 
 async function saveBedData() {
     const payload = {
@@ -1235,69 +1131,111 @@ async function saveBedData() {
             method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
         });
         const data = await res.json();
-        if(data.success) { showToast('বেড তথ্য আপডেট হয়েছে!','success'); userData.icu_available = payload.icu; userData.emergency_bed_available = payload.emergency; localStorage.setItem('userData', JSON.stringify(userData)); }
+        if(data.success){ showToast('বেড তথ্য আপডেট হয়েছে!','success'); }
         else showToast(data.message,'error');
-    } catch(e) { showToast('সার্ভার এরর','error'); }
+    } catch(e){ showToast('সার্ভার এরর','error'); }
 }
 
-// ══════════════════════════════════════════════
-//  SETTINGS
-// ══════════════════════════════════════════════
+// ══ SETTINGS ══
 function initSettingsMap() {
-    if(settingsMap) return;
+    if(settingsMap) {
+        // Repopulate info each time
+        populateHospInfo();
+        return;
+    }
     mapboxgl.accessToken = MAPBOX_TOKEN;
     settingsMap = new mapboxgl.Map({
-        container: 'settingsMap', style: 'mapbox://styles/mapbox/streets-v12',
-        center: [settingsLocation.longitude, settingsLocation.latitude], zoom: 12,
-        maxBounds: [[85,19],[94,28]]
+        container:'settingsMap', style:'mapbox://styles/mapbox/streets-v12',
+        center:[settingsLocation.longitude, settingsLocation.latitude], zoom:12,
+        maxBounds:[[85,19],[94,28]]
     });
     settingsMap.addControl(new mapboxgl.NavigationControl(),'top-right');
     const el = document.createElement('div');
-    el.style.cssText = 'width:20px;height:20px;background:#2563eb;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.4);';
+    el.style.cssText='width:20px;height:20px;background:#2563eb;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.4);';
     settingsMarker = new mapboxgl.Marker({element:el,anchor:'bottom',draggable:true}).setLngLat([settingsLocation.longitude,settingsLocation.latitude]).addTo(settingsMap);
-    settingsMarker.on('dragend',()=>{ const ll=settingsMarker.getLngLat(); settingsLocation={latitude:ll.lat,longitude:ll.lng,address:settingsLocation.address}; document.getElementById('settingsLocText').textContent=`📍 ${ll.lat.toFixed(5)}, ${ll.lng.toFixed(5)}`; });
-    settingsMap.on('click',async e=>{ settingsMarker.setLngLat([e.lngLat.lng,e.lngLat.lat]); settingsMap.flyTo({center:[e.lngLat.lng,e.lngLat.lat],zoom:14}); const geo=await mapboxReverseGeocode(e.lngLat.lat,e.lngLat.lng); settingsLocation={latitude:e.lngLat.lat,longitude:e.lngLat.lng,address:geo.displayName||''}; document.getElementById('settingsLocText').textContent=`📍 ${geo.displayName||`${e.lngLat.lat.toFixed(5)}, ${e.lngLat.lng.toFixed(5)}`}`; });
-    document.getElementById('myLocBtn').addEventListener('click',async()=>{ const btn=document.getElementById('myLocBtn'); btn.textContent='⏳ খুঁজছে...'; try{ const c=await getGeolocationWithIPFallback(); settingsMap.flyTo({center:[c.lng,c.lat],zoom:15}); settingsMarker.setLngLat([c.lng,c.lat]); const geo=await mapboxReverseGeocode(c.lat,c.lng); settingsLocation={latitude:c.lat,longitude:c.lng,address:geo.displayName||''}; document.getElementById('settingsLocText').textContent=`📍 ${geo.displayName||''}`; }catch(e){} btn.textContent='📍 আমার অবস্থান'; });
-    // Info display
-    document.getElementById('hospInfoDisplay').innerHTML = `
+    settingsMarker.on('dragend',()=>{
+        const ll=settingsMarker.getLngLat();
+        settingsLocation={latitude:ll.lat,longitude:ll.lng,address:settingsLocation.address};
+        document.getElementById('settingsLocText').textContent=`📍 ${ll.lat.toFixed(5)}, ${ll.lng.toFixed(5)}`;
+    });
+    settingsMap.on('click',async e=>{
+        settingsMarker.setLngLat([e.lngLat.lng,e.lngLat.lat]);
+        settingsMap.flyTo({center:[e.lngLat.lng,e.lngLat.lat],zoom:14});
+        if(typeof mapboxReverseGeocode==='function'){
+            const geo=await mapboxReverseGeocode(e.lngLat.lat,e.lngLat.lng);
+            settingsLocation={latitude:e.lngLat.lat,longitude:e.lngLat.lng,address:geo.displayName||''};
+            document.getElementById('settingsLocText').textContent=`📍 ${geo.displayName||`${e.lngLat.lat.toFixed(5)}, ${e.lngLat.lng.toFixed(5)}`}`;
+        }
+    });
+    document.getElementById('myLocBtn').addEventListener('click', async () => {
+        const btn=document.getElementById('myLocBtn');
+        btn.textContent='⏳ খুঁজছে...';
+        try{
+            const c=await getGeolocationWithIPFallback();
+            settingsMap.flyTo({center:[c.lng,c.lat],zoom:15});
+            settingsMarker.setLngLat([c.lng,c.lat]);
+            if(typeof mapboxReverseGeocode==='function'){
+                const geo=await mapboxReverseGeocode(c.lat,c.lng);
+                settingsLocation={latitude:c.lat,longitude:c.lng,address:geo.displayName||''};
+                document.getElementById('settingsLocText').textContent=`📍 ${geo.displayName||''}`;
+            }
+        }catch(e){}
+        btn.textContent='📍 আমার অবস্থান';
+    });
+    populateHospInfo();
+    document.getElementById('sPhone').value=userData.phone||'';
+    document.getElementById('sContactPerson').value=userData.contact_person||'';
+    document.getElementById('apiKeyText').textContent=userData.api_key||'—';
+}
+
+function populateHospInfo() {
+    document.getElementById('hospInfoDisplay').innerHTML=`
         <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f5f9;"><span style="color:var(--gray)">নাম</span><strong>${userData.name||'—'}</strong></div>
         <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f5f9;"><span style="color:var(--gray)">ইমেইল</span><strong>${userData.email||'—'}</strong></div>
         <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f5f9;"><span style="color:var(--gray)">ফোন</span><strong>${userData.phone||'—'}</strong></div>
         <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f5f9;"><span style="color:var(--gray)">লোকেশন</span><strong>${userData.location||'—'}</strong></div>
         <div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="color:var(--gray)">লাইসেন্স</span><strong>${userData.license_number||'—'}</strong></div>`;
-    document.getElementById('sPhone').value = userData.phone||'';
-    document.getElementById('sContactPerson').value = userData.contact_person||'';
-    document.getElementById('apiKeyText').textContent = userData.api_key||'—';
 }
 
 document.getElementById('settingsProfileForm').addEventListener('submit', async e => {
     e.preventDefault();
-    const payload = { hospitalId:userData.id, phone:document.getElementById('sPhone').value, contactPerson:document.getElementById('sContactPerson').value, address:settingsLocation.address, latitude:settingsLocation.latitude, longitude:settingsLocation.longitude, location:userData.location };
+    const payload={
+        hospitalId:userData.id,
+        phone:document.getElementById('sPhone').value,
+        contactPerson:document.getElementById('sContactPerson').value,
+        address:settingsLocation.address,
+        latitude:settingsLocation.latitude,
+        longitude:settingsLocation.longitude,
+        location:userData.location
+    };
     try {
-        const res = await fetch('/api/hospital/update-profile', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
-        const data = await res.json();
-        if(data.success){ showToast('প্রোফাইল আপডেট হয়েছে','success'); if(data.hospitalData){ userData={...userData,...data.hospitalData}; localStorage.setItem('userData',JSON.stringify(userData)); } }
-        else showToast(data.message,'error');
+        const res=await fetch('/api/hospital/update-profile',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+        const data=await res.json();
+        if(data.success){
+            showToast('প্রোফাইল আপডেট হয়েছে','success');
+            if(data.hospitalData){ userData={...userData,...data.hospitalData}; localStorage.setItem('userData',JSON.stringify(userData)); }
+        } else showToast(data.message,'error');
     } catch(e){ showToast('সার্ভার এরর','error'); }
 });
 
-function copyApiKey() { navigator.clipboard.writeText(userData.api_key||'').then(()=>showToast('কপি হয়েছে','success')).catch(()=>showToast('কপি ব্যর্থ','error')); }
-async function regenerateApiKey() {
+function copyApiKey(){ navigator.clipboard.writeText(userData.api_key||'').then(()=>showToast('কপি হয়েছে','success')).catch(()=>showToast('কপি ব্যর্থ','error')); }
+async function regenerateApiKey(){
     if(!confirm('নতুন API Key তৈরি করবেন? পুরনো key নিষ্ক্রিয় হবে।')) return;
-    try {
-        const res = await fetch('/api/hospital/regenerate-api-key', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ hospitalId:userData.id }) });
-        const data = await res.json();
+    try{
+        const res=await fetch('/api/hospital/regenerate-api-key',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({hospitalId:userData.id})});
+        const data=await res.json();
         if(data.success){ userData.api_key=data.apiKey; localStorage.setItem('userData',JSON.stringify(userData)); document.getElementById('apiKeyText').textContent=data.apiKey; showToast('নতুন API Key তৈরি হয়েছে','success'); }
-    } catch(e){}
+    }catch(e){}
 }
 
-// ══════════════════════════════════════════════
-//  HELPERS
-// ══════════════════════════════════════════════
-function formatTime(t) { if(!t) return '—'; try{ const [h,m]=String(t).split(':').map(Number); const p=h>=12?'PM':'AM'; const fh=h>12?h-12:(h===0?12:h); return `${String(fh).padStart(2,'0')}:${String(m).padStart(2,'0')} ${p}`; }catch(e){return t;} }
+// ══ HELPERS ══
+function formatTime(t){
+    if(!t) return '—';
+    try{ const [h,m]=String(t).split(':').map(Number); const p=h>=12?'PM':'AM'; const fh=h>12?h-12:(h===0?12:h); return `${String(fh).padStart(2,'0')}:${String(m).padStart(2,'0')} ${p}`; }catch(e){return t;}
+}
 
-// Initial load
+// ══ INIT ══
 loadDashboard();
 </script>
-</body>
 </html>
+</body>
