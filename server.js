@@ -22,7 +22,7 @@ app.use(express.static('public')); // ফ্রন্টএন্ড ফাই�
 
 const ALLOWED_BLOOD_GROUPS = ['A+', 'B+', 'O+', 'AB+', 'A-', 'B-', 'O-', 'AB-'];
 const ALLOWED_DONOR_STATUSES = ['Available', 'Busy'];
-const ALLOWED_USER_TABLES = ['donors', 'hospitals'];
+const ALLOWED_USER_TABLES = ['donors', 'hospitals', 'doctors'];
 const ALLOWED_APPLICATION_TYPES = ['donor', 'hospital'];
 const ALLOWED_APPLICATION_STATUSES = ['Pending', 'Approved', 'Rejected'];
 const REQUEST_EXPIRY_MINUTES = 5;
@@ -177,18 +177,17 @@ function dbQuery(query, values = []) {
     });
 }
 
-// ── Race-condition lock: prevent multiple simultaneous activateNextDonor for same request ──
 const _activateLocks = new Set();
 
 async function sendRequestToDonor(donor, request) {
     // Even without FCM token, the donor will see it when they open the app
     // (it appears in their pending-requests list)
     if (!donor.fcm_token) {
-        console.log(`⚠️ No FCM token for ${donor.name} — will appear in-app when they login.`);
+        console.log(`[warn] No FCM token for ${donor.name} — will appear in-app when they login.`);
         return false;
     }
     if (admin.apps.length === 0) {
-        console.log(`⚠️ Firebase not configured — notification skipped for ${donor.name}.`);
+        console.log(`[warn] Firebase not configured — notification skipped for ${donor.name}.`);
         return false;
     }
 
@@ -225,24 +224,21 @@ async function sendRequestToDonor(donor, request) {
 
     try {
         await admin.messaging().send(message);
-        console.log(`✅ Push notification sent to: ${donor.name}`);
+        console.log(`[ok] Push sent to: ${donor.name}`);
         return true;
     } catch (error) {
-        console.error(`❌ Failed to send push notification to ${donor.name}:`, error.message);
+        console.error(`[err] Push failed for ${donor.name}:`, error.message);
         // If token is invalid/expired, clear it
         if (error.code === 'messaging/invalid-registration-token' ||
             error.code === 'messaging/registration-token-not-registered') {
             await dbQuery('UPDATE donors SET fcm_token = NULL WHERE id = ?', [donor.id]).catch(() => {});
-            console.log(`🧹 Cleared invalid FCM token for ${donor.name}`);
+            console.log(`[info] Cleared invalid FCM token for ${donor.name}`);
         }
         return false;
     }
 }
 
-/**
- * Finds all Available donors in the same district as the request,
- * sorted by distance (nearest first). Excludes donors already in the queue.
- */
+// Find available donors in district, sorted by distance
 async function findAvailableDonorsInDistrict(request, excludeDonorIds = []) {
     const district = normalizeText(request.district) || extractDistrict(request.location);
     const requestLat = Number(request.latitude);
@@ -278,16 +274,10 @@ async function findAvailableDonorsInDistrict(request, excludeDonorIds = []) {
         });
 }
 
-/**
- * Core serial queue engine:
- * - Checks if already completed or has an active (unexpired) notification → skip
- * - Finds next queued donor who is still Available → notifies them
- * - If queue is empty → done (exhausted), do NOT re-scan
- */
+// Activate next queued donor for a blood request
 async function activateNextDonor(requestId) {
-    // ── Prevent duplicate concurrent calls for the same request ──
     if (_activateLocks.has(requestId)) {
-        console.log(`⏳ Request #${requestId}: activateNextDonor already running — skipping duplicate call.`);
+        console.log(`[skip] Request #${requestId}: activateNextDonor already running — skipping duplicate call.`);
         return { activated: false, reason: 'locked' };
     }
     _activateLocks.add(requestId);
@@ -345,7 +335,7 @@ async function activateNextDonor(requestId) {
         `, [requestId]);
 
         if (nextRows.length === 0) {
-            console.log(`ℹ️ Request #${requestId}: Queue exhausted. All district donors have been contacted.`);
+            console.log(`[info] Request #${requestId}: Queue exhausted. All district donors have been contacted.`);
             return { activated: false, reason: 'exhausted' };
         }
 
@@ -354,7 +344,7 @@ async function activateNextDonor(requestId) {
         await dbQuery('UPDATE blood_requests SET expires_at = DATE_ADD(NOW(), INTERVAL ? MINUTE) WHERE id = ?',
             [REQUEST_EXPIRY_MINUTES, requestId]);
         await sendRequestToDonor(donor, request);
-        console.log(`✅ Request #${requestId}: Activated donor ${donor.name} (#${donor.id}) — nearest first`);
+        console.log(`[ok] Request #${requestId}: Activated donor ${donor.name} (#${donor.id}) — nearest first`);
         return { activated: true, donor };
     } finally {
         _activateLocks.delete(requestId);
@@ -567,37 +557,36 @@ function setupSchema() {
     `);
 }
 
-// ==========================================
-//    1. Database Connection Logic
-// ==========================================
-const db = mysql.createConnection({
+// --- Database Connection ---
+const db = mysql.createPool({
     host: process.env.DB_HOST,
     port: process.env.DB_PORT || 3306,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
+    database: process.env.DB_NAME,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0,
+    enableKeepAlive: true,
+    keepAliveInitialDelay: 10000
 });
 
-db.connect((err) => {
+db.query('SELECT 1', (err) => {
     if (err) {
-        console.log('❌ MySQL Connection Failed!', err.message);
+        console.log('MySQL connection failed.', err.message);
     } else {
-        console.log('✅ MySQL Database Connected Successfully!');
+        console.log('MySQL connected.');
         setupSchema();
     }
 });
 
-// ==========================================
-//    2. Push Notification Logic Init
-// ==========================================
+// --- Push Notification Init ---
 // Firebase Admin SDK initialized at the top.
 // WhatsApp logic has been removed as requested.
 
-// ==========================================
 
-// ==========================================
-//    3. Core Emergency & Public APIs
-// ==========================================
+
+// --- Core Emergency & Public APIs ---
 
 // --- [পাবলিক] ইমার্জেন্সি রিকোয়েস্ট এবং অটোমেশন API ---
 /**
@@ -640,9 +629,9 @@ app.post('/api/emergency', (req, res) => {
     findAvailableDonorsInDistrict(requestSeed)
         .then((sortedDonors) => {
             if (sortedDonors.length > 0) {
-                console.log(`✅ ${sortedDonors.length} জন ${bloodGroup} Available donor পাওয়া গেছে ${district}-তে। Queue তৈরি হচ্ছে...`);
+                console.log(`[ok] ${sortedDonors.length} ${bloodGroup} Available donor found in ${district}. Building queue...`);
             } else {
-                console.log(`ℹ️ ${district}-তে এখন কোনো Available ${bloodGroup} donor নেই।`);
+                console.log(`[info] ${district}: no Available ${bloodGroup} donors right now.`);
             }
 
             // Save blood request to DB first
@@ -822,9 +811,7 @@ app.get('/api/donors', (req, res) => {
 });
 
 // --- [পাবলিক] হোমপেজের জন্য লাইভ পরিসংখ্যান (Stats) API ---
-// ==========================================
-//    CLEAN URL ROUTES (no .html in URL)
-// ==========================================
+// --- Clean URL Routes ---
 
 const path = require('path');
 const publicDir = path.join(__dirname, 'public');
@@ -853,7 +840,7 @@ Object.entries(cleanUrlMap).forEach(([slug, file]) => {
     // Also support /slug?query=string by keeping query strings intact via sendFile
 });
 
-// ==========================================
+
 app.get('/api/stats', async (req, res) => {
     try {
         const donorsRes = await dbQuery("SELECT COUNT(*) AS count FROM donors");
@@ -957,9 +944,7 @@ app.post('/api/applications', (req, res) => {
 });
 
 
-// ==========================================
-//    4. SUPER ADMIN (Master Control) APIs
-// ==========================================
+// --- Super Admin APIs ---
 const SUPER_ADMIN_KEY = process.env.SUPER_ADMIN_KEY || "TanjilBoss@2026"; 
 
 app.post('/api/superadmin/verify', (req, res) => {
@@ -1111,7 +1096,7 @@ app.post('/api/superadmin/users', (req, res) => {
     const type = normalizeText(req.body.type);
 
     if (masterKey !== SUPER_ADMIN_KEY) return res.status(403).json({ success: false, message: 'Access Denied!' });
-    if (!['donors', 'hospitals'].includes(type)) return res.status(400).json({ success: false, message: 'ইউজার টাইপ সঠিক নয়।' });
+    if (!['donors', 'hospitals', 'doctors'].includes(type)) return res.status(400).json({ success: false, message: 'ইউজার টাইপ সঠিক নয়।' });
 
     const query = type === 'donors'
         ? `SELECT d.id, d.name, d.email, d.blood_group, d.location, d.address, d.latitude, d.longitude, d.phone,
@@ -1122,10 +1107,15 @@ app.post('/api/superadmin/users', (req, res) => {
                   (SELECT COUNT(*) FROM donor_requests dr WHERE dr.donor_id = d.id AND dr.status = 'Rejected') as rejected_requests
            FROM donors d
            ORDER BY d.created_at DESC`
-        : `SELECT id, name, email, location, phone, address, latitude, longitude, contact_person,
+        : type === 'hospitals'
+        ? `SELECT id, name, email, location, phone, address, latitude, longitude, contact_person,
                   license_number, username, password, icu_available, emergency_bed_available,
                   status, created_at
            FROM hospitals
+           ORDER BY created_at DESC`
+        : `SELECT id, name, email, phone, district as location, specialties, designation, experience_years, fee,
+                  treated_diseases, username, password, status, created_at
+           FROM doctors
            ORDER BY created_at DESC`;
 
     db.query(query, (err, results) => {
@@ -1141,7 +1131,7 @@ app.put('/api/superadmin/update-user', (req, res) => {
     const id = Number(req.body.id);
 
     if (masterKey !== SUPER_ADMIN_KEY) return res.status(403).json({ success: false, message: 'Access Denied!' });
-    if (!Number.isInteger(id) || !['donors', 'hospitals'].includes(type)) {
+    if (!Number.isInteger(id) || !['donors', 'hospitals', 'doctors'].includes(type)) {
         return res.status(400).json({ success: false, message: 'আপডেট রিকোয়েস্ট সঠিক নয়।' });
     }
 
@@ -1192,6 +1182,37 @@ app.put('/api/superadmin/update-user', (req, res) => {
                 return res.status(500).json({ success: false, message: 'ডোনার আপডেট করতে সমস্যা হয়েছে।' });
             }
             res.json({ success: true, message: 'ডোনারের তথ্য আপডেট হয়েছে।' });
+        });
+    }
+
+    if (type === 'doctors') {
+        const specialties = normalizeText(req.body.specialties);
+        const designation = normalizeText(req.body.designation);
+        const experienceYears = req.body.experienceYears === '' || req.body.experienceYears == null ? 0 : Number(req.body.experienceYears);
+        const fee = req.body.fee === '' || req.body.fee == null ? 0 : Number(req.body.fee);
+        const treatedDiseases = toNullableText(req.body.treatedDiseases);
+        const status = normalizeText(req.body.status);
+
+        if (!specialties || !designation || !status || !Number.isInteger(experienceYears) || !Number.isInteger(fee)) {
+            return res.status(400).json({ success: false, message: 'ডক্টরের তথ্য সঠিক নয়।' });
+        }
+
+        const query = `
+            UPDATE doctors
+            SET name = ?, email = ?, phone = ?, district = ?, specialties = ?, designation = ?,
+                experience_years = ?, fee = ?, treated_diseases = ?, username = ?, password = ?, status = ?
+            WHERE id = ?
+        `;
+
+        return db.query(query, [
+            name, email || null, phone, location, specialties, designation,
+            experienceYears, fee, treatedDiseases, username, password, status, id
+        ], (err) => {
+            if (err) {
+                if (err.code === 'ER_DUP_ENTRY') return res.status(400).json({ success: false, message: 'ইউজারনেমটি আগে থেকেই আছে।' });
+                return res.status(500).json({ success: false, message: 'ডক্টর আপডেট করতে সমস্যা হয়েছে।' });
+            }
+            res.json({ success: true, message: 'ডক্টরের তথ্য আপডেট হয়েছে।' });
         });
     }
 
@@ -1330,9 +1351,7 @@ app.delete('/api/superadmin/delete-user', (req, res) => {
 });
 
 
-// ==========================================
-//    5. HOSPITAL PORTAL APIs
-// ==========================================
+// --- Hospital Portal APIs ---
 
 // --- হসপিটাল লগিন ---
 app.post('/api/hospital/login', (req, res) => {
@@ -1380,9 +1399,7 @@ app.post('/api/hospital/regenerate-api-key', (req, res) => {
     });
 });
 
-// =============================================================
-//   🔐 SECURE DEDICATED API FOR AUTOMATED HOSPITAL UPDATES
-// =============================================================
+// --- Secure API for Automated Hospital Updates ---
 /**
  * POST /api/v1/hospital/update-beds
  * Public API for automated third-party tools or medical devices to update beds.
@@ -1456,9 +1473,7 @@ app.post('/api/v1/hospital/update-beds', (req, res) => {
 });
 
 
-// ==========================================
-//    6. DONOR PORTAL APIs
-// ==========================================
+// --- Donor Portal APIs ---
 
 // --- ইউনিফাইড লগিন (অটোম্যাটিক রোল ডিটেকশন) ---
 app.post('/api/unified-login', async (req, res) => {
@@ -1957,7 +1972,7 @@ app.post('/api/donor/request-response', async (req, res) => {
 
         if (status === 'Accepted') {
             await dbQuery('UPDATE blood_requests SET status = "Completed" WHERE id = ? AND status = "Pending"', [requestIdNumber]).catch(() => {});
-            console.log(`✅ Donor #${donorIdNumber} accepted request #${requestIdNumber}`);
+            console.log(`[ok] Donor #${donorIdNumber} accepted request #${requestIdNumber}`);
         } else {
             activateNextDonor(requestIdNumber).catch(e => console.error('Activate next donor:', e.message));
             console.log(`↩️ Donor #${donorIdNumber} rejected request #${requestIdNumber} — next donor will be notified`);
@@ -1975,9 +1990,7 @@ app.post('/api/donor/request-response', async (req, res) => {
     }
 });
 
-// ==========================================
-//    7. Test Data & Utility APIs
-// ==========================================
+// --- Test Data & Utility APIs ---
 
 /**
  * POST /api/superadmin/seed-test-donors
@@ -2035,7 +2048,7 @@ app.post('/api/superadmin/seed-test-donors', async (req, res) => {
 
     res.json({
         success: true,
-        message: `✅ ${created} test donors created, ${skipped} already existed.`,
+        message: `${created} test donors created, ${skipped} already existed.`,
         created, skipped,
         errors: errors.length ? errors : undefined
     });
@@ -2094,7 +2107,7 @@ app.post('/api/superadmin/seed-test-hospitals', async (req, res) => {
 
     res.json({
         success: true,
-        message: `✅ ${created} test hospitals seeded, ${skipped} already existed.`,
+        message: `${created} test hospitals seeded, ${skipped} already existed.`,
         created, skipped,
         errors: errors.length ? errors : undefined
     });
@@ -2725,9 +2738,7 @@ app.post('/api/doctor/delete-chamber', (req, res) => {
     });
 });
 
-// ════════════════════════════════════════════════════════════
-//   1. HOSPITAL — Doctor Management
-// ════════════════════════════════════════════════════════════
+// --- Hospital: Doctor Management ---
 
 // হসপিটালের সাথে লিংকড ডক্টর লিস্ট (with appointment stats)
 app.post('/api/hospital/doctors', async (req, res) => {
@@ -2814,9 +2825,7 @@ app.post('/api/hospital/doctor-detail', async (req, res) => {
     }
 });
 
-// ════════════════════════════════════════════════════════════
-//   2. HOSPITAL — Appointment Management
-// ════════════════════════════════════════════════════════════
+// --- Hospital: Appointment Management ---
 
 // তারিখ অনুযায়ী এই হসপিটালের অ্যাপয়েন্টমেন্ট
 app.post('/api/hospital/appointments-by-date', async (req, res) => {
@@ -2947,9 +2956,7 @@ app.post('/api/hospital/update-appointment', async (req, res) => {
     }
 });
 
-// ════════════════════════════════════════════════════════════
-//   3. HOSPITAL — Blood Requests (with bag count)
-// ════════════════════════════════════════════════════════════
+// --- Hospital: Blood Requests ---
 
 // হসপিটালের নিজস্ব ব্লাড রিকোয়েস্ট হিস্ট্রি
 app.post('/api/hospital/blood-requests', async (req, res) => {
@@ -3056,9 +3063,7 @@ app.post('/api/hospital/send-blood-request', async (req, res) => {
     }
 });
 
-// ════════════════════════════════════════════════════════════
-//   4. HOSPITAL — Bed Management (Full: ICU + EM + Normal)
-// ════════════════════════════════════════════════════════════
+// --- Hospital: Bed Management ---
 
 app.post('/api/hospital/update-beds-full', async (req, res) => {
     const hospitalId = Number(req.body.hospitalId);
@@ -3089,12 +3094,10 @@ app.post('/api/hospital/update-beds-full', async (req, res) => {
     }
 });
 
-// ════════════════════════════════════════════════════════════
-//   5. PUBLIC — Medical Centers (hospitals with full bed info)
-// ════════════════════════════════════════════════════════════
+// --- Public: Medical Centers ---
 
 
-// ══ CHANGE PASSWORD ══════════════════════════════════════════
+// --- Change Password ---
 
 // Hospital change password
 app.post('/api/hospital/change-password', async (req, res) => {
@@ -3165,77 +3168,6 @@ app.post('/api/doctor/change-password', async (req, res) => {
     }
 });
 
-
-// ══ CHANGE PASSWORD ══════════════════════════════════════════
-
-// Hospital change password
-app.post('/api/hospital/change-password', async (req, res) => {
-    const { hospitalId, currentPassword, newPassword } = req.body;
-    if (!hospitalId || !currentPassword || !newPassword) {
-        return res.status(400).json({ success: false, message: 'সব তথ্য পূরণ করুন।' });
-    }
-    if (newPassword.length < 6) {
-        return res.status(400).json({ success: false, message: 'নতুন পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।' });
-    }
-    try {
-        const [rows] = await db.promise().query('SELECT password FROM hospitals WHERE id = ?', [hospitalId]);
-        if (!rows.length) return res.status(404).json({ success: false, message: 'হাসপাতাল পাওয়া যায়নি।' });
-        if (rows[0].password !== currentPassword) {
-            return res.status(401).json({ success: false, message: 'বর্তমান পাসওয়ার্ড সঠিক নয়।' });
-        }
-        await db.promise().query('UPDATE hospitals SET password = ? WHERE id = ?', [newPassword, hospitalId]);
-        res.json({ success: true, message: 'পাসওয়ার্ড পরিবর্তন হয়েছে।' });
-    } catch (e) {
-        console.error(e);
-        res.status(500).json({ success: false, message: 'সার্ভার এরর।' });
-    }
-});
-
-// Donor change password
-app.post('/api/donor/change-password', async (req, res) => {
-    const { donorId, currentPassword, newPassword } = req.body;
-    if (!donorId || !currentPassword || !newPassword) {
-        return res.status(400).json({ success: false, message: 'সব তথ্য পূরণ করুন।' });
-    }
-    if (newPassword.length < 6) {
-        return res.status(400).json({ success: false, message: 'নতুন পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।' });
-    }
-    try {
-        const [rows] = await db.promise().query('SELECT password FROM donors WHERE id = ?', [donorId]);
-        if (!rows.length) return res.status(404).json({ success: false, message: 'ডোনার পাওয়া যায়নি।' });
-        if (rows[0].password !== currentPassword) {
-            return res.status(401).json({ success: false, message: 'বর্তমান পাসওয়ার্ড সঠিক নয়।' });
-        }
-        await db.promise().query('UPDATE donors SET password = ? WHERE id = ?', [newPassword, donorId]);
-        res.json({ success: true, message: 'পাসওয়ার্ড পরিবর্তন হয়েছে।' });
-    } catch (e) {
-        console.error(e);
-        res.status(500).json({ success: false, message: 'সার্ভার এরর।' });
-    }
-});
-
-// Doctor change password
-app.post('/api/doctor/change-password', async (req, res) => {
-    const { doctorId, currentPassword, newPassword } = req.body;
-    if (!doctorId || !currentPassword || !newPassword) {
-        return res.status(400).json({ success: false, message: 'সব তথ্য পূরণ করুন।' });
-    }
-    if (newPassword.length < 6) {
-        return res.status(400).json({ success: false, message: 'নতুন পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।' });
-    }
-    try {
-        const [rows] = await db.promise().query('SELECT password FROM doctors WHERE id = ?', [doctorId]);
-        if (!rows.length) return res.status(404).json({ success: false, message: 'ডাক্তার পাওয়া যায়নি।' });
-        if (rows[0].password !== currentPassword) {
-            return res.status(401).json({ success: false, message: 'বর্তমান পাসওয়ার্ড সঠিক নয়।' });
-        }
-        await db.promise().query('UPDATE doctors SET password = ? WHERE id = ?', [newPassword, doctorId]);
-        res.json({ success: true, message: 'পাসওয়ার্ড পরিবর্তন হয়েছে।' });
-    } catch (e) {
-        console.error(e);
-        res.status(500).json({ success: false, message: 'সার্ভার এরর।' });
-    }
-});
 
 app.get('/api/medical-centers', async (req, res) => {
     try {
@@ -3255,10 +3187,8 @@ app.get('/api/medical-centers', async (req, res) => {
 });
 
 
-// ==========================================
-//    9. Server Startup
-// ==========================================
+// --- Server Startup ---
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`🚀 Server is running on http://localhost:${PORT}`);
+    console.log(`Server running at http://localhost:${PORT}`);
 });

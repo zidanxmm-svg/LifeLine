@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <defs>
+        <linearGradient id="dropGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#e11d48" />
+            <stop offset="100%" stop-color="#be123c" />
+        </linearGradient>
+    </defs>
+    <!-- A beautifully styled blood drop with a clinic pulse wave -->
+    <path d="M50,8 C50,8 82,44 82,66 A32,32 0 0,1 18,66 C18,44 50,8 50,8 Z" fill="url(#dropGrad)" />
+    <!-- Pulse Highlight inside the drop -->
+    <path d="M36,66 Q50,76 64,66" stroke="#ffffff" stroke-width="5.5" stroke-linecap="round" fill="none" opacity="0.85" />
+    <circle cx="50" cy="46" r="6" fill="#ffffff" opacity="0.9" />
+</svg>

@@ -354,9 +354,33 @@
             .stats-grid-hero { grid-template-columns: repeat(2, 1fr); gap: 12px; }
         }
         @media(max-width:768px){
+            .nav-inner {
+                flex-direction: column;
+                height: auto;
+                padding: 12px 1rem;
+                gap: 10px;
+            }
+            .nav-links {
+                width: 100%;
+                overflow-x: auto;
+                white-space: nowrap;
+                justify-content: flex-start;
+                padding-bottom: 4px;
+                -webkit-overflow-scrolling: touch;
+                gap: 8px;
+            }
+            .nav-links::-webkit-scrollbar {
+                display: none;
+            }
+            .nav-btn {
+                padding: 7px 14px;
+                font-size: 0.82rem;
+                flex-shrink: 0;
+            }
             .hosp-grid{grid-template-columns:1fr;}
-            .nav-links .nav-btn-ghost:not(:last-child){display:none;}
-            .controls{padding: 16px; gap: 12px;}
+            .controls{padding: 16px; gap: 12px; flex-direction: column; align-items: stretch;}
+            .controls select, .controls input, .controls button { width: 100% !important; margin: 0 !important; }
+            .hero { padding: 140px 1rem 60px; }
         }
         @media(max-width:576px){
             .stats-grid-hero { grid-template-columns: 1fr; }
@@ -374,7 +398,7 @@
         <div class="nav-links">
             <a href="/doctors" class="nav-btn nav-btn-ghost" style="color:#34d399;border-color:rgba(16,185,129,.35);">🩺 ডাক্তার সিরিয়াল</a>
             <a href="/medical-centers" class="nav-btn nav-btn-active">🏥 Medical Centers</a>
-            <a href="/apply" class="nav-btn nav-btn-ghost">আবেদন করুন</a>
+            <!-- <a href="/apply" class="nav-btn nav-btn-ghost">আবেদন করুন</a> -->
             <a href="/login" id="loginBtn" class="nav-btn nav-btn-red">লগইন / রেজিস্টার</a>
         </div>
     </div>
@@ -622,5 +646,8 @@ if(userRole === 'hospital'){
     if(btn){ btn.textContent='ড্যাশবোর্ড'; btn.href='/donor-panel'; }
 }
 </script>
+
+    <!-- Language Switcher Central JS -->
+    <script src="js/lang-switcher.js"></script>
 </body>
 </html>

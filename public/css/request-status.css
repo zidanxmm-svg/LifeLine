@@ -1,7 +1,5 @@
-/* =========================================================
-   LifeLine — Request Status Tracking Page
-   Premium dark-accent design with smooth animations
-   ========================================================= */
+/* LifeLine — Request Status Tracking Page */
+/* Premium dark-accent design with smooth animations */
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -40,7 +38,7 @@ body {
     line-height: 1.6;
 }
 
-/* ── Topbar ──────────────────────────────────────────── */
+/* Topbar */
 .topbar {
     position: sticky;
     top: 0;
@@ -89,7 +87,7 @@ body {
 }
 .home-link:hover { background: rgba(255,255,255,.25); }
 
-/* ── Shell ───────────────────────────────────────────── */
+/* Shell */
 .shell {
     width: min(1200px, calc(100% - 40px));
     margin: 28px auto 60px;
@@ -97,12 +95,12 @@ body {
     gap: 18px;
 }
 
-/* ── Utilities ───────────────────────────────────────── */
+/* Utilities */
 .muted   { color: var(--slate-500); }
 .small   { font-size: .84rem; }
 .hidden  { display: none !important; }
 
-/* ── Hero Panel ──────────────────────────────────────── */
+/* Hero Panel */
 .hero-panel {
     display: flex;
     align-items: flex-start;
@@ -142,7 +140,7 @@ h1 {
 
 .update-time { font-size: .8rem; }
 
-/* ── Badges ──────────────────────────────────────────── */
+/* Badges */
 .badge {
     display: inline-flex;
     align-items: center;
@@ -161,7 +159,7 @@ h1 {
 .badge-queued     { color: #374151; background: var(--slate-100); }
 .badge-active     { color: #1d4ed8; background: var(--blue-light); }
 
-/* ── Queue Banner ────────────────────────────────────── */
+/* Queue Banner */
 .queue-banner {
     display: flex;
     align-items: center;
@@ -281,7 +279,7 @@ h1 {
     100% { box-shadow: 0 0 0 0 rgba(37,99,235,0); }
 }
 
-/* ── Terminal Notice ─────────────────────────────────── */
+/* Terminal Notice */
 .terminal-notice {
     padding: 14px 20px;
     border-radius: var(--radius-sm);
@@ -308,7 +306,7 @@ h1 {
     to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Summary Grid ────────────────────────────────────── */
+/* Summary Grid */
 .summary-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -347,7 +345,7 @@ h1 {
 .card-queued   .summary-val { color: var(--amber); }
 .card-rejected .summary-val { color: var(--red); }
 
-/* ── Details Grid ────────────────────────────────────── */
+/* Details Grid */
 .details-grid {
     display: grid;
     grid-template-columns: 380px 1fr;
@@ -379,7 +377,7 @@ h1 {
     letter-spacing: -.02em;
 }
 
-/* ── Details List ────────────────────────────────────── */
+/* Details List */
 .details-list {
     display: grid;
     gap: 0;
@@ -427,7 +425,7 @@ h1 {
 }
 .phone-link:hover { opacity: .8; }
 
-/* ── Donor List ──────────────────────────────────────── */
+/* Donor List */
 .donor-list {
     display: grid;
     gap: 12px;
@@ -529,7 +527,7 @@ h1 {
 }
 .call-btn:hover { background: #15803d; transform: scale(1.03); }
 
-/* ── Empty / Error ───────────────────────────────────── */
+/* Empty / Error */
 .empty-state {
     padding: 36px 20px;
     text-align: center;
@@ -550,7 +548,7 @@ h1 {
     font-weight: 700;
 }
 
-/* ── Loading Skeletons ───────────────────────────────── */
+/* Loading Skeletons */
 .loading-card {
     height: 80px;
     border-radius: var(--radius-md);
@@ -575,7 +573,7 @@ h1 {
     100% { background-position: -300% 0; }
 }
 
-/* ── Responsive ──────────────────────────────────────── */
+/* Responsive */
 @media (max-width: 1050px) {
     .details-grid { grid-template-columns: 1fr; }
     .summary-grid { grid-template-columns: repeat(3, 1fr); }

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <title>রক্তের রিকোয়েস্ট ট্র্যাকিং — LifeLine</title>
     <meta name="description" content="আপনার জরুরি রক্তের রিকোয়েস্টের লাইভ স্ট্যাটাস দেখুন। LifeLine স্বয়ংক্রিয়ভাবে নিকটতম donor খুঁজছে।">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,7 +13,7 @@
 </head>
 <body>
 
-    <!-- ── Topbar ───────────────────────────────────────── -->
+    <!-- Topbar -->
     <nav class="topbar">
         <a href="/" class="brand">
             <span class="brand-mark">🩸</span>
@@ -23,7 +24,7 @@
 
     <main class="shell">
 
-        <!-- ── Hero ─────────────────────────────────────── -->
+        <!-- Hero -->
         <header class="hero-panel">
             <div class="hero-text">
                 <p class="eyebrow">🔴 Live Blood Request Tracking</p>
@@ -36,7 +37,7 @@
             </div>
         </header>
 
-        <!-- ── Queue Status Banner ───────────────────────── -->
+        <!-- Queue Status Banner -->
         <section class="queue-banner state-loading" id="queueBanner" aria-live="polite">
             <div class="banner-icon" id="bannerIcon">⏳</div>
             <div class="banner-content">
@@ -54,7 +55,7 @@
         <!-- Terminal notice (shown when completed or exhausted) -->
         <div class="terminal-notice hidden" id="terminalNotice"></div>
 
-        <!-- ── Summary Cards ─────────────────────────────── -->
+        <!-- Summary Cards -->
         <section class="summary-grid" aria-label="রিকোয়েস্ট সারসংক্ষেপ">
             <div class="summary-card">
                 <span class="summary-label">মোট পাঠানো</span>
@@ -78,7 +79,7 @@
             </div>
         </section>
 
-        <!-- ── Details Grid ──────────────────────────────── -->
+        <!-- Details Grid -->
         <section class="details-grid">
 
             <!-- Request Details -->
@@ -111,5 +112,8 @@
     </main>
 
     <script src="/js/request-status.js"></script>
+
+    <!-- Language Switcher Central JS -->
+    <script src="js/lang-switcher.js"></script>
 </body>
 </html>

@@ -233,7 +233,7 @@ function initMap() {
         });
     }
 
-    // ── Donor Map Search ──
+    // Donor Map Search
     const searchInput   = document.getElementById('donorMapSearch');
     const searchResults = document.getElementById('donorSearchResults');
     if (searchInput) {
@@ -508,7 +508,7 @@ function startCountdowns() {
     function updateTimers() {
         const nowTs = new Date().getTime();
 
-        // ── Pending 5-min countdown ──
+        // Pending 5-min countdown
         document.querySelectorAll('.countdown-timer').forEach(el => {
             let createdAt = new Date(el.dataset.created).getTime();
             if (isNaN(createdAt)) return;
@@ -532,7 +532,7 @@ function startCountdowns() {
             }
         });
 
-        // ── Accepted 5-hour top-priority countdown ──
+        // Accepted 5-hour top-priority countdown
         document.querySelectorAll('.accepted-timer').forEach(el => {
             let createdAt = new Date(el.dataset.created).getTime();
             if (isNaN(createdAt)) return;

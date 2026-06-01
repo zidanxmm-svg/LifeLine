@@ -1,7 +1,5 @@
-/* =========================================================
-   LifeLine — Request Status / Tracking Page
-   Smart serial donor queue — web-only, no app touch
-   ========================================================= */
+// LifeLine — Request Status / Tracking Page
+// Smart serial donor queue — web-only, no app touch
 
 function escapeHtml(value) {
     return String(value ?? '').replace(/[&<>"']/g, (c) => (
@@ -17,7 +15,7 @@ let   pollInterval     = null;
 let   pollCount        = 0;
 let   lastQueueStatus  = null;
 
-/* ── Date formatting ─────────────────────────────────── */
+// Date formatting
 function formatDate(value) {
     if (!value) return 'N/A';
     return new Date(value).toLocaleString('bn-BD', { dateStyle: 'medium', timeStyle: 'short' });
@@ -31,7 +29,7 @@ function formatRemaining(secs) {
     return m > 0 ? `${m} মিনিট ${r} সেকেন্ড` : `${r} সেকেন্ড`;
 }
 
-/* ── Badge HTML ──────────────────────────────────────── */
+// Badge HTML
 function statusBadge(status) {
     const map = {
         'Accepted':    ['badge-accepted',  '✅ Accepted'],
@@ -44,7 +42,7 @@ function statusBadge(status) {
     return `<span class="badge ${cls}">${label}</span>`;
 }
 
-/* ── Timer card ──────────────────────────────────────── */
+// Timer card
 function startLocalCountdown(initSeconds) {
     if (countdownTimer) clearInterval(countdownTimer);
     remainingSeconds = Math.max(0, Math.round(Number(initSeconds) || 0));
@@ -71,7 +69,7 @@ function stopCountdown() {
     if (timerBar) timerBar.style.width = '0%';
 }
 
-/* ── Queue Banner ────────────────────────────────────── */
+// Queue Banner
 function renderQueueBanner(queueState, request) {
     const banner  = document.getElementById('queueBanner');
     const icon    = document.getElementById('bannerIcon');
@@ -108,7 +106,7 @@ function renderQueueBanner(queueState, request) {
     }
 }
 
-/* ── Summary grid ────────────────────────────────────── */
+// Summary grid
 function renderSummary(summary) {
     document.getElementById('totalCount').textContent    = summary.total;
     document.getElementById('acceptedCount').textContent = summary.accepted;
@@ -117,7 +115,7 @@ function renderSummary(summary) {
     document.getElementById('closedCount').textContent   = (summary.rejected || 0) + (summary.noResponse || 0);
 }
 
-/* ── Request details panel ───────────────────────────── */
+// Request details panel
 function renderDetails(request, queueState) {
     document.getElementById('pageTitle').textContent = `${escapeHtml(request.bloodGroup)} রক্তের রিকোয়েস্ট`;
     document.getElementById('requestMeta').textContent =
@@ -144,7 +142,7 @@ function renderDetails(request, queueState) {
     `;
 }
 
-/* ── Donor list ──────────────────────────────────────── */
+// Donor list
 function renderDonors(donors, queueState) {
     const list = document.getElementById('donorList');
 
@@ -192,7 +190,7 @@ function renderDonors(donors, queueState) {
     }).join('');
 }
 
-/* ── Main load ───────────────────────────────────────── */
+// Main load
 async function loadStatus() {
     pollCount++;
     const donorList = document.getElementById('donorList');
@@ -268,6 +266,6 @@ function stopPolling() {
     if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
 }
 
-/* ── Boot ────────────────────────────────────────────── */
+// Boot
 loadStatus();
 pollInterval = setInterval(loadStatus, 5000);

@@ -1,0 +1,17 @@
+# Cloudflare Pages Redirects & API Proxy Map
+# IMPORTANT: Replace "https://lifeline-backend.onrender.com" with your actual Render.com web service URL!
+
+/api/*              https://lifeline-backend.onrender.com/api/:splat  200
+/donor-panel        /donor-dashboard.html                             200
+/hospital-panel      /hospital-dashboard.html                           200
+/dr-panel           /doctor-dashboard.html                            200
+/root-panel         /system-root.html                                 200
+/admin-panel        /master-dashboard.html                            200
+/login              /login.html                                       200
+/apply              /login.html                                       200
+/doctors            /doctors.html                                     200
+/medical-centers    /medical-centers.html                             200
+/blood-request      /blood-request.html                               200
+/request-status     /request-status.html                              200
+/hospital-beds      /hospital-beds.html                               200
+/prescription       /prescription.html                                200

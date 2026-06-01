@@ -1,8 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <title>LifeLine - Find a Doctor</title>
     <link rel="stylesheet" href="css/doctor.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -10,7 +11,7 @@
         /* Advanced Filtering UI CSS */
         .search-container {
             max-width: 1200px;
-            margin: -40px auto 30px;
+            margin: 20px auto 30px;
             background: var(--card-bg);
             padding: 2rem;
             border-radius: 1rem;
@@ -168,8 +169,11 @@
     </section>
 
     <!-- Advanced Notice -->
-    <div style="background-color: #fee2e2; border-bottom: 1px solid #fca5a5; padding: 15px; text-align: center; font-weight: 600; color: #991b1b; margin-bottom: 2rem;">
-        <i class="fas fa-info-circle"></i> অ্যাপয়েন্টমেন্ট নিশ্চিত করার জন্য ১০০ টাকা অ্যাডভান্স প্রদান করতে হবে। বাকি টাকা চেম্বারে গিয়ে প্রদান করতে হবে।
+    <div class="container" style="margin-bottom: 1.5rem; margin-top: 1.5rem;">
+        <div style="background: rgba(225, 29, 72, 0.05); border: 1px solid rgba(225, 29, 72, 0.15); padding: 1.25rem 1.5rem; border-radius: 12px; font-weight: 600; color: #b91c1c; display: flex; align-items: center; gap: 1rem; box-shadow: var(--shadow);">
+            <i class="fas fa-info-circle" style="font-size: 1.4rem; color: var(--danger);"></i>
+            <span style="font-size: 0.95rem; line-height: 1.5;">অ্যাপয়েন্টমেন্ট নিশ্চিত করার জন্য ১০০ টাকা অ্যাডভান্স প্রদান করতে হবে। বাকি টাকা চেম্বারে গিয়ে প্রদান করতে হবে।</span>
+        </div>
     </div>
 
     <!-- Live Statistics Dashboard -->
@@ -481,11 +485,11 @@
                         }
 
                         chambersHtml += `
-                            <div style="margin-bottom:0.8rem; background:rgba(0,0,0,0.02); padding:0.5rem; border-radius:0.3rem;">
+                            <div class="chamber-box" style="margin-bottom:0.8rem;">
                                 <div style="font-weight:600; color:var(--primary-dark);"><i class="fas fa-clinic-medical"></i> ${highlightedClinicName}</div>
-                                <div style="font-size:0.85rem; color:var(--text-muted);"><i class="fas fa-map-marker-alt"></i> ${c.location}</div>
-                                <div style="font-size:0.85rem; color:var(--text-muted);"><i class="far fa-calendar-alt"></i> ${c.visiting_days}</div>
-                                <div style="font-size:0.85rem; color:var(--text-muted);"><i class="far fa-clock"></i> ${formatBanglaTime(c.start_time)} - ${formatBanglaTime(c.end_time)}</div>
+                                <div style="font-size:0.85rem; color:var(--text-muted); margin-top: 4px;"><i class="fas fa-map-marker-alt"></i> ${c.location}</div>
+                                <div style="font-size:0.85rem; color:var(--text-muted); margin-top: 2px;"><i class="far fa-calendar-alt"></i> ${c.visiting_days}</div>
+                                <div style="font-size:0.85rem; color:var(--text-muted); margin-top: 2px;"><i class="far fa-clock"></i> ${formatBanglaTime(c.start_time)} - ${formatBanglaTime(c.end_time)}</div>
                                 ${dateStatusHtml}
                                 ${buttonHtml}
                             </div>
@@ -668,5 +672,8 @@
             fetchDoctorStats();
         };
     </script>
+
+    <!-- Language Switcher Central JS -->
+    <script src="js/lang-switcher.js"></script>
 </body>
 </html>

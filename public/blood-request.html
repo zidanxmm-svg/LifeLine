@@ -1,9 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="bn">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <title>জরুরি রক্তের আবেদন — LifeLine</title>
     <meta name="description"
         content="LifeLine — জরুরি রক্তের জন্য এখনই আবেদন করুন। কাছের রক্তদাতাদের কাছে ইমার্জেন্সি অ্যালার্ট পাঠান।">
@@ -460,6 +461,15 @@
                 height: 220px;
             }
         }
+
+        @media (max-width: 480px) {
+            .logo-text { font-size: 1.2rem !important; }
+            .nav-back { padding: 6px 12px !important; font-size: 0.78rem !important; }
+            .nav-inner { padding: 0 1rem !important; }
+            .page-header { padding: 36px 1rem 50px !important; }
+            .page-header-icon { font-size: 2.8rem !important; }
+            .blood-grid { grid-template-columns: repeat(3, 1fr) !important; }
+        }
     </style>
 </head>
 
@@ -817,6 +827,9 @@
             });
         }
     </script>
+
+    <!-- Language Switcher Central JS -->
+    <script src="js/lang-switcher.js"></script>
 </body>
 
 </html>

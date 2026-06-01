@@ -231,7 +231,14 @@ function applyMapLocationToTarget() {
 }
 
 document.querySelectorAll('.navTab').forEach((tab) => {
-    tab.addEventListener('click', () => switchPanel(tab.dataset.panel));
+    tab.addEventListener('click', () => {
+        switchPanel(tab.dataset.panel);
+        const sidebar = document.getElementById('adminSidebar');
+        if (sidebar && window.innerWidth < 1024) {
+            sidebar.classList.add('-translate-x-full');
+            sidebar.classList.remove('translate-x-0');
+        }
+    });
 });
 
 document.addEventListener('click', (event) => {
@@ -508,6 +515,17 @@ function userDetails(user) {
         `;
     }
 
+    if (currentUserType === 'doctors') {
+        return `
+            ${common}
+            <div><span class="detail-label">Specialties</span><strong class="detail-value">${escapeHtml(user.specialties)}</strong></div>
+            <div><span class="detail-label">Designation</span><strong class="detail-value">${escapeHtml(user.designation)}</strong></div>
+            <div><span class="detail-label">Experience</span><strong class="detail-value">${escapeHtml(user.experience_years)} Years</strong></div>
+            <div><span class="detail-label">Fee</span><strong class="detail-value">৳${escapeHtml(user.fee)}</strong></div>
+            <div class="sm:col-span-2"><span class="detail-label">Diseases Treated</span><strong class="detail-value">${escapeHtml(user.treated_diseases || 'N/A')}</strong></div>
+        `;
+    }
+
     return `
         ${common}
         <div><span class="detail-label">Contact Person</span><strong class="detail-value">${escapeHtml(user.contact_person || 'N/A')}</strong></div>
@@ -621,7 +639,7 @@ document.getElementById('userList').addEventListener('click', async (event) => {
 
 function openEditModal(user) {
     editingUser = user;
-    document.getElementById('editModalTitle').innerText = `Edit ${currentUserType === 'donors' ? 'Donor' : 'Hospital'}: ${user.name}`;
+    document.getElementById('editModalTitle').innerText = `Edit ${currentUserType === 'donors' ? 'Donor' : currentUserType === 'hospitals' ? 'Hospital' : 'Doctor'}: ${user.name}`;
     const form = document.getElementById('editUserForm');
 
     if (currentUserType === 'donors') {
@@ -648,7 +666,7 @@ function openEditModal(user) {
             <input name="password" required placeholder="Password" class="field" value="${escapeHtml(user.password)}">
             <button type="submit" class="sm:col-span-2 bg-slate-900 text-white font-bold py-3 rounded-md hover:bg-black">Save Donor</button>
         `;
-    } else {
+    } else if (currentUserType === 'hospitals') {
         form.innerHTML = `
             <input name="name" required placeholder="Hospital name" class="field" value="${escapeHtml(user.name)}">
             <input name="email" type="email" placeholder="Email" class="field" value="${escapeHtml(user.email || '')}">
@@ -669,6 +687,25 @@ function openEditModal(user) {
             <input name="username" required placeholder="Username" class="field" value="${escapeHtml(user.username)}">
             <input name="password" required placeholder="Password" class="field" value="${escapeHtml(user.password)}">
             <button type="submit" class="sm:col-span-2 bg-slate-900 text-white font-bold py-3 rounded-md hover:bg-black">Save Hospital</button>
+        `;
+    } else if (currentUserType === 'doctors') {
+        form.innerHTML = `
+            <input name="name" required placeholder="Name" class="field" value="${escapeHtml(user.name)}">
+            <input name="email" type="email" placeholder="Email" class="field" value="${escapeHtml(user.email || '')}">
+            <input name="phone" required placeholder="WhatsApp" class="field" value="${escapeHtml(user.phone)}">
+            <input name="location" required placeholder="District" class="field" value="${escapeHtml(user.location)}">
+            <input name="specialties" required placeholder="Specialties" class="field" value="${escapeHtml(user.specialties)}">
+            <input name="designation" required placeholder="Designation" class="field" value="${escapeHtml(user.designation)}">
+            <input name="experienceYears" type="number" required placeholder="Experience Years" class="field" value="${escapeHtml(user.experience_years)}">
+            <input name="fee" type="number" required placeholder="Fee" class="field" value="${escapeHtml(user.fee)}">
+            <input name="treatedDiseases" placeholder="Treated Diseases (comma separated)" class="field sm:col-span-2" value="${escapeHtml(user.treated_diseases || '')}">
+            <select name="status" class="field bg-white">
+                <option value="Active" ${user.status === 'Active' ? 'selected' : ''}>Active</option>
+                <option value="Inactive" ${user.status === 'Inactive' ? 'selected' : ''}>Inactive</option>
+            </select>
+            <input name="username" required placeholder="Username" class="field" value="${escapeHtml(user.username)}">
+            <input name="password" required placeholder="Password" class="field" value="${escapeHtml(user.password)}">
+            <button type="submit" class="sm:col-span-2 bg-slate-900 text-white font-bold py-3 rounded-md hover:bg-black">Save Doctor</button>
         `;
     }
 
@@ -811,6 +848,19 @@ async function createAccount(endpoint, data, form) {
         await showPopup('সার্ভার এরর!', 'error');
     }
 }
+
+window.toggleAdminSidebar = function() {
+    const sidebar = document.getElementById('adminSidebar');
+    if (sidebar) {
+        if (sidebar.classList.contains('-translate-x-full')) {
+            sidebar.classList.remove('-translate-x-full');
+            sidebar.classList.add('translate-x-0');
+        } else {
+            sidebar.classList.remove('translate-x-0');
+            sidebar.classList.add('-translate-x-full');
+        }
+    }
+};
 
 async function refreshDashboard() {
     await Promise.all([loadStats(), loadApplications(currentApplicationStatus)]);

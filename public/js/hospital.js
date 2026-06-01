@@ -55,7 +55,7 @@ function updateProfileDisplay() {
     updateApiKeyAndSnippetsDisplay();
 }
 
-// ── API Key and Code Snippet Management ──
+// API Key and Code Snippet Management
 let activeTab = 'curl';
 
 function updateApiKeyAndSnippetsDisplay() {

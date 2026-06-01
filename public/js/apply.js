@@ -43,7 +43,7 @@ function setSelectedLocation({ latitude, longitude, address }) {
     }
 }
 
-// ─── Mapbox Map Initialization ───
+// Mapbox Map Initialization
 function initMap(startLat, startLng) {
     mapboxgl.accessToken = MAPBOX_TOKEN;
 
@@ -105,7 +105,7 @@ function initMap(startLat, startLng) {
         });
     });
 
-    // ── আমার অবস্থান খুঁজুন button ──
+    // আমার অবস্থান খুঁজুন বোতাম
     const findBtn = document.getElementById('findLocationBtnInside');
     if (findBtn) {
         findBtn.addEventListener('click', () => {
@@ -135,7 +135,7 @@ function initMap(startLat, startLng) {
         });
     }
 
-    // ── Map Search ──
+    // Map Search
     const searchInput   = document.getElementById('applyMapSearch');
     const searchResults = document.getElementById('applySearchResults');
     if (searchInput) {

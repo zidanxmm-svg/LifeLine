@@ -1,8 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <title>LifeLine — জরুরি রক্ত ও হাসপাতাল সেবা</title>
     <meta name="description" content="LifeLine — বাংলাদেশে জরুরি রক্তের জন্য আবেদন করুন এবং কাছের হাসপাতালের বেড খুঁজুন।">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -354,18 +355,40 @@
             .features-grid { grid-template-columns: 1fr 1fr; }
         }
         @media (max-width: 768px) {
+            .nav-inner {
+                flex-direction: column;
+                height: auto;
+                padding: 12px 1rem;
+                gap: 10px;
+            }
+            .nav-links {
+                width: 100%;
+                overflow-x: auto;
+                white-space: nowrap;
+                justify-content: flex-start;
+                padding-bottom: 4px;
+                -webkit-overflow-scrolling: touch;
+                gap: 8px;
+            }
+            .nav-links::-webkit-scrollbar {
+                display: none;
+            }
+            .nav-btn {
+                padding: 7px 14px;
+                font-size: 0.82rem;
+                flex-shrink: 0;
+            }
             .features-grid { grid-template-columns: 1fr; gap: 16px; }
             .steps-grid { grid-template-columns: 1fr; gap: 16px; }
-            .hero { padding: 90px 1rem 50px; }
-            .stats-row { gap: 28px; }
+            .hero { padding: 140px 1rem 50px; }
+            .stats-row { gap: 20px; flex-wrap: wrap; justify-content: center; }
             .stat-divider { display: none; }
-            .nav-links .nav-btn-ghost { display: none; }
             .feature-card { padding: 32px 28px; }
         }
         @media (max-width: 480px) {
             .logo-text { font-size: 1.3rem; }
             .hero-title { font-size: 1.9rem; }
-            .nav-btn { padding: 8px 16px; font-size: 0.82rem; }
+            .nav-btn { padding: 7px 12px; font-size: 0.78rem; }
         }
     </style>
 </head>
@@ -576,5 +599,8 @@
     }
 })();
 </script>
+
+    <!-- Language Switcher Central JS -->
+    <script src="js/lang-switcher.js"></script>
 </body>
 </html>

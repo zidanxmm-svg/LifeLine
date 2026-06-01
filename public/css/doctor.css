@@ -437,6 +437,56 @@ table tr:hover td {
 @media (max-width: 992px) {
     .dashboard-grid {
         grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    .sidebar {
+        padding: 1rem;
+    }
+    .sidebar > div {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        text-align: left !important;
+        margin-bottom: 1rem !important;
+    }
+    .sidebar .avatar {
+        margin: 0 !important;
+        width: 50px;
+        height: 50px;
+        font-size: 1.4rem;
+    }
+    .sidebar h3 {
+        margin-top: 0 !important;
+        font-size: 1.05rem;
+    }
+    .sidebar-menu {
+        display: flex;
+        overflow-x: auto;
+        white-space: nowrap;
+        gap: 6px;
+        margin-top: 1rem;
+        padding-bottom: 6px;
+        -webkit-overflow-scrolling: touch;
+    }
+    .sidebar-menu::-webkit-scrollbar {
+        display: none;
+    }
+    .sidebar-menu li {
+        margin: 0;
+    }
+    .sidebar-menu li a {
+        margin-bottom: 0;
+        padding: 8px 14px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+    .sidebar-menu li a.active {
+        border-left: none;
+        border-bottom: 3px solid var(--primary-color);
+        border-radius: 20px 20px 0 0;
     }
     .stats-strip {
         grid-template-columns: 1fr 1fr;
@@ -448,3 +498,130 @@ table tr:hover td {
         grid-template-columns: 1fr;
     }
 }
+
+/* public/doctors.html specific doctor-card layout styling */
+.doctor-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.doctor-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: rgba(2, 132, 199, 0.25);
+}
+
+.doctor-card .card-header {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.doctor-card .avatar {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+    color: var(--primary-dark);
+    border: 2px solid #bae6fd;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.doctor-card .doc-info h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 0.25rem;
+}
+
+.doctor-card .doc-info p {
+    font-size: 0.88rem;
+    margin: 0;
+}
+
+.doctor-card .card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex-grow: 1;
+}
+
+.doctor-card hr {
+    border: 0;
+    border-top: 1px dashed var(--border);
+    margin: 0.5rem 0;
+}
+
+.doctor-card .chamber-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.doctor-card .chamber-box {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    transition: var(--transition);
+}
+
+.doctor-card .chamber-box:hover {
+    background: #f1f5f9;
+    border-color: var(--primary-color);
+}
+
+/* Responsive styles for doctors page */
+@media (max-width: 768px) {
+    .header-container {
+        padding: 0.8rem 1rem;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .logo {
+        font-size: 1.2rem;
+    }
+    .nav-links {
+        gap: 1rem;
+    }
+    .nav-links a {
+        font-size: 0.85rem;
+    }
+    .container {
+        padding: 0 1rem;
+        margin: 1rem auto;
+    }
+    .search-container {
+        padding: 1.25rem;
+        margin: 10px auto 20px;
+    }
+    .search-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+    .stats-dashboard {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+    .stat-card {
+        padding: 1rem !important;
+    }
+    .doctor-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+

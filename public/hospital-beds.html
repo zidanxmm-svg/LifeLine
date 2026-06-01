@@ -1,9 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="bn">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <title>হাসপাতাল বেড স্ট্যাটাস — LifeLine</title>
     <meta name="description" content="LifeLine — কাছের হাসপাতালে ICU ও ইমার্জেন্সি বেডের লাইভ তথ্য দেখুন।">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -668,6 +669,17 @@
             }
         }
 
+        @media (max-width: 480px) {
+            .logo-text { font-size: 1.2rem !important; }
+            .nav-back { padding: 6px 12px !important; font-size: 0.78rem !important; }
+            .nav-inner { padding: 0 1rem !important; }
+            .page-header { padding: 36px 1rem 50px !important; }
+            .page-header-icon { font-size: 2.8rem !important; }
+            .detail-box { border-radius: 16px !important; }
+            .detail-box-header { padding: 18px 20px !important; }
+            .detail-box-body { padding: 18px 20px !important; }
+        }
+
         .btn-find-location {
             width: 100%;
             display: flex;
@@ -1136,6 +1148,9 @@
             loadHospitals();
         })();
     </script>
+
+    <!-- Language Switcher Central JS -->
+    <script src="js/lang-switcher.js"></script>
 </body>
 
 </html>

@@ -1,8 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <title>LifeLine Admin Console</title>
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -10,13 +11,21 @@
 </head>
 <body class="bg-slate-100 text-slate-900 min-h-screen">
     <div class="min-h-screen lg:grid lg:grid-cols-[280px_1fr]">
-        <aside class="bg-slate-950 text-white p-5 lg:min-h-screen">
+        <header class="lg:hidden bg-slate-950 text-white p-4 flex items-center justify-between sticky top-0 z-40 shadow-md">
+            <div class="flex items-center gap-3">
+                <button onclick="toggleAdminSidebar()" class="text-white text-2xl focus:outline-none">☰</button>
+                <span class="text-lg font-bold">LifeLine Admin</span>
+            </div>
+            <button onclick="logout()" class="text-xs bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded-md transition font-bold">Logout</button>
+        </header>
+
+        <aside id="adminSidebar" class="fixed inset-y-0 left-0 z-50 w-72 transform -translate-x-full lg:translate-x-0 lg:static lg:h-auto lg:min-h-screen transition-transform duration-300 bg-slate-950 text-white p-5 flex flex-col justify-between overflow-y-auto">
             <div class="flex items-center justify-between lg:block">
                 <div>
                     <p class="text-xs uppercase tracking-[0.2em] text-red-300 font-bold">LifeLine</p>
                     <h1 class="text-2xl font-bold mt-1">Admin Console</h1>
                 </div>
-                <button onclick="logout()" class="lg:hidden text-sm bg-red-600 hover:bg-red-700 px-4 py-2 rounded-md transition font-bold">Logout</button>
+                <button onclick="toggleAdminSidebar()" class="lg:hidden text-slate-400 hover:text-white text-2xl">✕</button>
             </div>
 
             <nav class="mt-8 grid gap-2 text-sm font-semibold">
@@ -136,6 +145,7 @@
                         <div class="flex rounded-md border border-slate-300 overflow-hidden">
                             <button class="userTypeTab px-4 py-3 bg-slate-900 text-white font-bold" data-type="donors">Donors</button>
                             <button class="userTypeTab px-4 py-3 bg-white text-slate-700 font-bold border-l" data-type="hospitals">Hospitals</button>
+                            <button class="userTypeTab px-4 py-3 bg-white text-slate-700 font-bold border-l" data-type="doctors">Doctors</button>
                         </div>
                     </div>
                     <div id="userList" class="p-5 grid gap-3">
@@ -426,5 +436,8 @@
         `).join('') || '<tr><td colspan="8" class="p-4 text-slate-500">No donors found.</td></tr>';
     }
     </script>
+
+    <!-- Language Switcher Central JS -->
+    <script src="js/lang-switcher.js"></script>
 </body>
 </html>

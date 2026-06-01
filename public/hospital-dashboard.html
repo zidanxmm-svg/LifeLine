@@ -713,6 +713,10 @@
             .content { padding: 14px; }
             .topbar { padding: 0 16px; }
         }
+        @media (max-width: 576px) {
+            .stats-grid { grid-template-columns: 1fr !important; }
+            .topbar { padding: 10px 16px !important; height: auto !important; flex-direction: column !important; align-items: stretch !important; gap: 8px !important; }
+        }
     </style>
 </head>
 <body>
@@ -721,10 +725,11 @@
 <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">
         <div class="logo-icon">🏥</div>
-        <div>
+        <div style="min-width:0">
             <div class="logo-text">LifeLine</div>
             <div class="logo-sub">Hospital Portal</div>
         </div>
+        <button onclick="toggleSidebar()" style="background:none;border:none;color:rgba(255,255,255,0.6);font-size:1.6rem;cursor:pointer;margin-left:auto;" class="lg:hidden">✕</button>
     </div>
 
     <div class="nav-section">
@@ -1218,6 +1223,7 @@ function switchPage(page) {
     document.querySelector(`.nav-item[data-page="${page}"]`)?.classList.add('active');
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(`page-${page}`)?.classList.add('active');
+    document.getElementById('sidebar')?.classList.remove('open');
     const t = pageTitles[page] || ['',''];
     document.getElementById('topbarTitle').textContent = t[0];
     document.getElementById('topbarSub').textContent = t[1];
@@ -1792,4 +1798,7 @@ async function submitChangePassword(e) {
     });
 </script>
 </html>
+
+    <!-- Language Switcher Central JS -->
+    <script src="js/lang-switcher.js"></script>
 </body>
